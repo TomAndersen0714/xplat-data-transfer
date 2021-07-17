@@ -13,13 +13,12 @@ job_id = 'xqc_xdqc_kefu_stat_sync'
 dag_id = f'{job_id}_to_ch_daily'
 
 # data source
-platform = 'jd'
 pulsar_conn_id = 'pulsar_cluster01_slb'
-pulsar_topic = f'persistent://bigdata/cross_platform/{job_id}'
-subscription = f'{job_id}_{platform}'
+pulsar_topic = 'persistent://bigdata/data_cross/mini_send_tb'
+subscription = 'bigdata_data_sync'
 
 # data destination
-ch_conn_id = 'clickhouse'
+ch_conn_id = 'clickhouse_zjk_008'
 ch_tmp_local_table = 'tmp.xdqc_kefu_stat_daily_local'
 ch_tmp_dist_table = 'tmp.xdqc_kefu_stat_daily_all'
 ch_dest_table = 'xqc_ods.xdqc_kefu_stat_all'
@@ -27,7 +26,7 @@ ch_dest_table = 'xqc_ods.xdqc_kefu_stat_all'
 default_args = {
     'owner': 'chengcheng',
     'depends_on_past': False,
-    'start_date': datetime(2021, 7, 12),
+    'start_date': datetime(2021, 7, 13),
     'email': ['chengcheng@xiaoduotech.com'],
     'email_on_failure': True,
     'email_on_retry': True,
@@ -39,7 +38,7 @@ dag = DAG(
     dag_id=dag_id,
     description='CH每日增量同步 xqc_ods.xdqc_kefu_stat_all',
     default_args=default_args,
-    schedule_interval="31 5 * * *",
+    schedule_interval="25 5 * * *",
     max_active_runs=1,
     concurrency=2
 )
