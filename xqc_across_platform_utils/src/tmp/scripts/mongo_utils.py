@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 
-import argparse
-import sys
 import getopt
-from typing import List, Tuple, Union
+import sys
+
 from pymongo import MongoClient
+from typing import List, Tuple
 
 mongo_default_server_host = "10.0.0.8"
 mongo_default_server_port = 27017
@@ -50,7 +50,9 @@ def parse_args_by_getopt(args: List[str]) -> Tuple[str, List[str]]:
 
 
 def connect_and_find(uri: str, database: str = None, table: str = None, rows: int = 0):
-    """Connect MongoDB Database and print first several rows of corresponding table."""
+    """
+    Connect MongoDB Database and print first several rows of corresponding table.
+    """
     mongo_client = MongoClient(uri)
 
     # 默认输出所有库名
@@ -92,12 +94,13 @@ def connect_and_find(uri: str, database: str = None, table: str = None, rows: in
 
 
 if __name__ == '__main__':
-    # args = "-h 10.0.0.127 -p 30808 -u xdmp -i 20E6QK8V xd_stat stat_question_for_shop".split(" ")
+    # demo
+    # python3 mongo_utils.py -h 10.0.0.127 -p 30808 -u xdmp -i 20E6QK8V xd_stat stat_question_for_shop
     args = sys.argv[1:]
     uri, rest_args = parse_args_by_getopt(args)
     print(uri, rest_args)
 
-    # limit the number of params
+    # limit the number of non-opt params
     while len(rest_args) < 3:
         rest_args.append('')
     while len(rest_args) > 3:

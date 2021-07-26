@@ -2,6 +2,7 @@
 import logging
 
 from time import sleep
+from typing import Optional, Dict
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.contrib.hooks.clickhouse_hook import ClickHouseHook
@@ -24,16 +25,17 @@ ch_tmp_local_table = 'tmp.xdqc_kefu_stat_daily_local'
 ch_tmp_dist_table = ch_tmp_local_table
 ch_dest_local_table = 'xqc_ods.xdqc_kefu_stat_local'
 ch_dest_dist_table = ch_dest_local_table
+partition = f"({{{{ ds_nodash }}}}, '{platform}')"
 
 # data destination
 pulsar_conn_id = 'pulsar_cluster01_slb'
 pulsar_topic = f'persistent://bigdata/data_cross/{platform}_send_tb'
 
-header = {
+header: Optional[Dict[str, str]] = {
     "task_id": dag_id,
     "db_type": "clickhouse",
     "target_table": "buffer.xdqc_kefu_stat_buffer",
-    "partition": "{{ds_nodash}}"
+    "partition": partition
 }
 
 default_args = {
@@ -111,7 +113,7 @@ kefu_stat_ch_drop_partition = PythonOperator(
     python_callable=ch_drop_partition,
     op_kwargs={
         'table': ch_dest_local_table,
-        'partition': f"({{{{ ds_nodash }}}}, '{platform}')"
+        'partition': partition
     },
     dag=dag
 )

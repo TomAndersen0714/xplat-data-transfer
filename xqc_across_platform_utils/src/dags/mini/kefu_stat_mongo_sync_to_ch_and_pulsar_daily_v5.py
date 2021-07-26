@@ -2,33 +2,32 @@
 import logging
 
 from time import sleep
-from typing import Optional, Dict
 from datetime import datetime, timedelta
+from typing import Optional, Dict
 from airflow import DAG
 from airflow.contrib.hooks.clickhouse_hook import ClickHouseHook
 from airflow.contrib.operators.clickhouse_to_pulsar import ClickHouseToPulsarOperator
 from airflow.contrib.operators.mongo_to_clickhouse_operator import MongoToClickHouseOperator
 from airflow.operators.python_operator import PythonOperator
 
+# configuration
+dag_id = f'xqc_xdqc_kefu_stat_mini_to_tb_ch_daily'
+
 # data source
 mongo_conn_id = 'xdqc_mongo'
 mongo_db = 'xdqc-tb'
 mongo_collection = 'kefu_stat'
-platform = 'ks'
-
-# configuration
-dag_id = f'xqc_xdqc_kefu_stat_{platform}_to_tb_ch_daily'
 
 # data transfer station
-ch_conn_id = 'clickhouse_ks'
+ch_conn_id = 'clickhouse_v1mini-bigdata-002'
 ch_tmp_local_table = 'tmp.xdqc_kefu_stat_daily_local'
-ch_tmp_dist_table = ch_tmp_local_table
+ch_tmp_dist_table = 'tmp.xdqc_kefu_stat_daily_all'
 ch_dest_local_table = 'xqc_ods.xdqc_kefu_stat_local'
-ch_dest_dist_table = ch_dest_local_table
+ch_dest_dist_table = 'xqc_ods.xdqc_kefu_stat_all'
 
 # data destination
 pulsar_conn_id = 'pulsar_cluster01_slb'
-pulsar_topic = f'persistent://bigdata/data_cross/{platform}_send_tb'
+pulsar_topic = 'persistent://bigdata/data_cross/mini_send_tb'
 
 header: Optional[Dict[str, str]] = {
     "task_id": dag_id,
@@ -62,16 +61,17 @@ dag = DAG(
 def daily_delta_query(ds_nodash):
     return [
         {"$match":
-             {"date": int(ds_nodash)}
-         }
+            {
+                "date": int(ds_nodash)
+            }
+        }
     ]
 
 
 # 清空 ClickHouse 临时表
 def truncate_ch_table(table_name):
     ch_hook = ClickHouseHook(ch_conn_id)
-    ch_hook.execute(f"truncate table {table_name}")
-    logging.info(f"truncate table {table_name}")
+    ch_hook.truncate_table(table_name)
     sleep(3)
 
 
@@ -101,9 +101,7 @@ kefu_stat_mongo_to_ch_tmp = MongoToClickHouseOperator(
 
 # 删除 ClickHouse 汇总表中对应的分区
 def ch_drop_partition(table, partition):
-    ch_hook = ClickHouseHook(ch_conn_id)
-    ch_hook.execute(f"alter table {table} drop partition {partition}")
-    logging.info(f"alter table {table} drop partition {partition}")
+    ClickHouseHook(ch_conn_id).drop_partition(table, partition)
     sleep(3)
 
 
@@ -112,7 +110,7 @@ kefu_stat_ch_drop_partition = PythonOperator(
     python_callable=ch_drop_partition,
     op_kwargs={
         'table': ch_dest_local_table,
-        'partition': f"({{{{ ds_nodash }}}}, '{platform}')"
+        'partition': "{{ ds_nodash }}"
     },
     dag=dag
 )
