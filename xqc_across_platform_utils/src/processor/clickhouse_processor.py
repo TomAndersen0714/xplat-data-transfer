@@ -2,7 +2,6 @@
 import logging
 
 from clickhouse_driver import Client
-
 from log_utils.log_types import *
 from .base_processor import BaseMsgProcessor
 
