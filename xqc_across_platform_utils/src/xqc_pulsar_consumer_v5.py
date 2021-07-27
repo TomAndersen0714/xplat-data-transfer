@@ -23,7 +23,7 @@ def flush_cache_to_db(msg_processors):
     """
     Flush the all cached data into corresponding database.
     """
-    logging.info('Trying to flush cached data to corresponding database.')
+    logging.info('Trying to flush all cached data to corresponding database.')
     for _, processor in msg_processors.items():
         try:
             if processor:
@@ -33,8 +33,8 @@ def flush_cache_to_db(msg_processors):
 
 
 def consume_msg_generator(
-        pulsar_url, topic, subscription, msg_processors,
-        consumer_type=ConsumerType.Shared, timeout_millis=15000
+        pulsar_url, topic, subscription, msg_processors, stop_signal: threading.Event,
+        consumer_type=ConsumerType.Shared, timeout_millis=15000,
 ):
     """
     Subscribe topic and return a generator for consuming message.
@@ -43,26 +43,29 @@ def consume_msg_generator(
         pulsar_client = Client(pulsar_url)
         consumer = pulsar_client.subscribe(
             topic=topic, subscription_name=subscription, consumer_type=consumer_type)
-        logging.info(f"Subscribing to topic:{topic}, subscription: {subscription}, "
+        logging.info(f"Subscribing to [{pulsar_url},{topic},{subscription}], "
                      f"consumer type:{consumer_type}")
     except Exception as e:
+        # if occur a unexpected error
         logging.error('\n' + str(e))
         return ''
 
     while True:
+        # check the stop signal
+        if stop_signal.is_set():
+            # if the generator is closed
+            logging.info(f"Consumer of [{pulsar_url},{topic},{subscription}] is closing!")
+            consumer.close()
+            pulsar_client.close()
+            flush_cache_to_db(msg_processors)
+            return
         try:
             msg = consumer.receive(timeout_millis)
-            logging.info('Receive %s:%s message %s' % (topic, subscription, msg.message_id()))
+            logging.info(f'Receive [%s,%s,%s] message:%s' %
+                         (pulsar_url, topic, subscription, msg.message_id()))
 
             yield msg
             consumer.acknowledge(msg)
-        except GeneratorExit:
-            # if the generator is closed
-            # note: this exception only occurs after 'yield' when generator is closed
-            logging.info(f"Consumer:[{pulsar_url},{topic},{subscription}] is closing!")
-            consumer.close()
-            pulsar_client.close()
-            break
         except Timeout:
             # if the consumer didn't get any message
             logging.info("Consumer didn't receive any message in past %ds, and will try to flush all caches."
@@ -76,7 +79,7 @@ def consume_msg_generator(
 
 def consume(
         pulsar_url, topic, subscription, consumer_type, timeout_millis,
-        msg_processors, stop: threading.Event
+        msg_processors, stop_signal: threading.Event
 ):
     """
     Consume message from pulsar.
@@ -85,17 +88,12 @@ def consume(
     msg_gen = consume_msg_generator(
         pulsar_url, topic, subscription,
         msg_processors=msg_processors, consumer_type=consumer_type,
-        timeout_millis=timeout_millis
+        timeout_millis=timeout_millis, stop_signal=stop_signal
     )
     start_time = time.time()
 
     # get and process every message
     for msg in msg_gen:
-        # check the stop signal
-        if stop.is_set():
-            msg_gen.close()
-            flush_cache_to_db(msg_processors)
-            return
 
         db_name = msg.properties().get('db_type', 'default').lower()
         if db_name and isinstance(msg_processors[db_name], BaseMsgProcessor):
