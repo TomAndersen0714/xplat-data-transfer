@@ -47,7 +47,7 @@ dag = DAG(
     default_args=default_args,
     schedule_interval="30 5 * * *",
     max_active_runs=1,
-    concurrency=2
+    concurrency=1
 )
 
 # 查询 ClickHouse 临时分布式表内容,并将其发送到跨平台 Pulsar 集群

@@ -1,7 +1,12 @@
 #!/usr/bin/python3
 import logging
+import pickle
+import threading
 
 from clickhouse_driver import Client
+from pulsar import Message
+from typing import Dict
+
 from log_utils.log_types import *
 from .base_processor import BaseMsgProcessor
 
@@ -21,7 +26,6 @@ class ClickHouseProcessor(BaseMsgProcessor):
         """
         Insert data into database(e.g. [{'a': 3, 'b': 'Tom'}], [(3,'Tom')]).
         """
-
         sql = f"insert into {table_name} values "
         insert_count = self.ch_client.execute(sql, rows_list)
         # print('insert into table %s: %d rows' % (table_name, insert_count))
@@ -34,7 +38,6 @@ class ClickHouseProcessor(BaseMsgProcessor):
         """
         Flush cached data into database.
         """
-
         # self.logger.info('Trying to flush cached data to ClickHouse!', log_type=NORMAL_LOG)
         table_names = list(self._rows_cache_dict.keys())
         if len(table_names) == 0:
@@ -50,3 +53,46 @@ class ClickHouseProcessor(BaseMsgProcessor):
                 # if insertion failed, dump the dirty data to dirty log
                 self.logger.error('Insertion failed!' + '\n' + str(e), log_type=NORMAL_LOG)
                 self.logger.error(tbl + ': ' + str(rows), log_type=DIRTY_LOG)
+
+    def clear_table(self, properties=None):
+        """
+        Clear specified table or partition.
+        """
+        if properties is None:
+            return
+
+        clear_table = properties.get('clear_table', None)
+        batch_id = properties.get('batch_id', None)
+
+        if clear_table and batch_id:
+            # ensure clear exactly-once and execute in the first arrived thread using double check lock
+            if clear_table not in self.table_batch_id \
+                    or self.table_batch_id[clear_table] != batch_id:
+                self.update_lock.acquire()
+                if clear_table not in self.table_batch_id \
+                        or self.table_batch_id[clear_table] != batch_id:
+
+                    self.table_batch_id[clear_table] = batch_id
+                    # update specified partition or table
+                    partition = properties.get('partition', None)
+                    cluster_name = properties.get('cluster_name', None)
+                    if partition:
+                        ch_del_sql = "ALTER TABLE %s {cluster} DROP PARTITION %s" % (clear_table, partition)
+                    else:
+                        ch_del_sql = "TRUNCATE TABLE %s {cluster}" % clear_table
+                    if cluster_name:
+                        ch_del_sql.format(cluster=f"ON CLUSTER {cluster_name}")
+                    else:
+                        ch_del_sql.format(cluster="")
+
+                    self.ch_client.execute(ch_del_sql)
+                    self.logger.info(ch_del_sql, log_type=NORMAL_LOG)
+
+                self.update_lock.release()
+
+    def truncate_table(self):
+        pass
+
+    def drop_partition(self, partition, cluster_name):
+        self.ch_client.execute()
+        pass

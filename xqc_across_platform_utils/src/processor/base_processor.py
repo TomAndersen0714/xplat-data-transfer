@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 import pickle
+import threading
 
 from abc import ABCMeta, abstractmethod
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from pulsar import Message
 
 from log_utils.log_types import *
@@ -18,6 +19,8 @@ class BaseMsgProcessor(metaclass=ABCMeta):
         self.insert_batch_rows = insert_batch_rows
         self.logger = logger
         self.name = name
+        self.table_batch_id: Dict[str, str] = dict()
+        self.update_lock = threading.Lock()
 
     def process_msg(self, msg: Message):
         # parse the message
@@ -26,10 +29,13 @@ class BaseMsgProcessor(metaclass=ABCMeta):
         msg_id = msg.message_id()
         target_table = properties.get('target_table', None)
 
+        # clear specified table or partition
+        self.clear_table(properties)
+
         # deserialize the data from message
         if target_table:
             try:
-                self.logger.info(f'Processing message:{msg_id}', log_type=NORMAL_LOG)
+                self.logger.info(f'Processing message: {msg_id}', log_type=NORMAL_LOG)
                 rows_bytes_list = pickle.loads(content)
                 msg_rows_list = [pickle.loads(rows_bytes_list[i])
                                  for i in range(len(rows_bytes_list))]
@@ -38,11 +44,11 @@ class BaseMsgProcessor(metaclass=ABCMeta):
                 # and process next message
                 self.logger.error(str(e), log_type=NORMAL_LOG)
                 self.logger.error(str(msg_id) + ' - ' + str(properties) +
-                                  ':' + str(content), log_type=BAD_MSG_LOG)
+                                  ': ' + str(content), log_type=BAD_MSG_LOG)
                 return
 
             # if pickle module deserialize message successfully, dump it to wal log
-            self.logger.info(str(properties) + ':' + str(msg_rows_list), log_type=WAL_LOG)
+            self.logger.info(str(properties) + ': ' + str(msg_rows_list), log_type=WAL_LOG)
 
             # allocate space and cache the records
             if target_table not in self._rows_cache_dict:
@@ -61,12 +67,16 @@ class BaseMsgProcessor(metaclass=ABCMeta):
         else:
             # raise TypeError('Target table is not specified!')
             # the properties of message doesn't contain 'target_table'
-            self.logger.error('Target table is not specified in properties!' +
+            self.logger.error('Target table is not specified in properties! ' +
                               str(msg_id) + ' - ' + str(properties), log_type=NORMAL_LOG)
             # dump this message to bad message log
             self.logger.error(str(msg_id) + ' - ' + str(properties) +
-                              ':' + str(content), log_type=BAD_MSG_LOG)
+                              ': ' + str(content), log_type=BAD_MSG_LOG)
 
     @abstractmethod
     def flush_cache_to_db(self):
+        pass
+
+    @abstractmethod
+    def clear_table(self, properties=None):
         pass

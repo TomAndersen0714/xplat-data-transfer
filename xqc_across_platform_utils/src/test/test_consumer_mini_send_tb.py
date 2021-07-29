@@ -14,10 +14,9 @@ def init_consumer():
     consumer = client.subscribe(topic, subscription, consumer_type=ConsumerType.Shared)
     while True:
         try:
-            msg = consumer.receive(timeout_millis=10000)
+            msg = consumer.receive(timeout_millis=5000)
             print(msg.message_id())
-            if msg.properties():
-                print(msg.properties())
+            print(msg.properties())
             consumer.acknowledge(msg)
             sleep(3)
         except Exception as e:

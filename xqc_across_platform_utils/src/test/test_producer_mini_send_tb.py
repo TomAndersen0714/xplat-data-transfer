@@ -11,19 +11,11 @@ def init_producer():
     producer = client.create_producer(topic=topic)
 
     properties = {
-        "worker_name": "",
-        "partition": {
-            "day": "int(ds_nodash)"
-        },
-        "sync_id": "hashlib.md5(file_path.encode('utf8')).hexdigest()",
-        "total_parts": "",
-        "cur_part": "",
-        "md5_checksum": "hashlib.md5(payload).hexdigest()",
-        "is_overwrite": False
+        "task_id": "mini_qc_to_tb"
     }
-    for count in range(10):
-        producer.send(('Test message %s' % count).encode('utf8'),
-                      properties=properties)
+    for count in range(3):
+        print('sending test message %d' % count)
+        producer.send(('Test message %s' % count).encode('utf8'), properties=properties)
         sleep(3)
 
 

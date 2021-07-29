@@ -13,12 +13,13 @@ __logger_dict__: Dict[str, logging.Logger] = dict()
 
 fmt_with_timestamp = logging.Formatter(
     '[%(asctime)s] '
-    '{%(filename)s:%(lineno)d,process:%(processName)s-%(process)d,thread:%(threadName)s-%(thread)d} '
+    '{%(filename)s:%(lineno)d, process:%(processName)s-%(process)d, thread:%(threadName)s-%(thread)d} '
     '%(levelname)s - %(message)s'
 )
 fmt_without_timestamp = logging.Formatter(
     "%(message)s"
 )
+
 
 
 def check_and_make_dir(base_path):
@@ -38,7 +39,7 @@ def check_and_make_dir(base_path):
 
 def check_file(filepath):
     if os.path.exists(filepath):
-        logging.info(f'{filepath} already exists!')
+        logging.info(f"'{filepath}' already exists!")
 
     if os.path.isdir(filepath):
         error = f"'{filepath}' is directory but not normal file!"

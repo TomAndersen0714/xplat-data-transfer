@@ -6,6 +6,6 @@
   "insert_batch_rows": 30000,
   "ch_host": "10.0.2.2",
   "ch_port": 29000,
-  "timeout_millis": 15000,
+  "timeout_millis": 30000,
   "base_path": "/data2/tmp/xqc_sync/log"
 }
