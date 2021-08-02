@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 # @Author   : chengcheng@xiaoduotech.com
-# @Date     : 2021/07/24
+# @Date     : 2021/07/30
 
 import json
 import logging
@@ -16,7 +16,7 @@ from _pulsar import ConsumerType, Timeout
 from pulsar import Client
 
 from processor.base_processor import BaseMsgProcessor
-from processor.clickhouse_processor import ClickHouseProcessor
+from processor.clickhouse_processor_v1 import ClickHouseProcessor
 
 
 def flush_cache_to_db(msg_processors):

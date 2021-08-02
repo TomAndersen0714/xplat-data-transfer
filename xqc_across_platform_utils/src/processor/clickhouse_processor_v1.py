@@ -1,12 +1,8 @@
 #!/usr/bin/python3
 import logging
-import pickle
-import threading
 
+from time import sleep
 from clickhouse_driver import Client
-from pulsar import Message
-from typing import Dict
-
 from log_utils.log_types import *
 from .base_processor import BaseMsgProcessor
 
@@ -68,31 +64,25 @@ class ClickHouseProcessor(BaseMsgProcessor):
             # ensure clear exactly-once and execute in the first arrived thread using double check lock
             if clear_table not in self.table_batch_id \
                     or self.table_batch_id[clear_table] != batch_id:
-                self.update_lock.acquire()
-                if clear_table not in self.table_batch_id \
-                        or self.table_batch_id[clear_table] != batch_id:
 
-                    self.table_batch_id[clear_table] = batch_id
-                    # update specified partition or table
-                    partition = properties.get('partition', None)
-                    cluster_name = properties.get('cluster_name', None)
-                    if partition:
-                        ch_del_sql = "ALTER TABLE %s {cluster} DROP PARTITION %s" % (clear_table, partition)
-                    else:
-                        ch_del_sql = "TRUNCATE TABLE %s {cluster}" % clear_table
-                    if cluster_name:
-                        ch_del_sql.format(cluster=f"ON CLUSTER {cluster_name}")
-                    else:
-                        ch_del_sql.format(cluster="")
+                with self.update_lock:
+                    if clear_table not in self.table_batch_id \
+                            or self.table_batch_id[clear_table] != batch_id:
 
-                    self.ch_client.execute(ch_del_sql)
-                    self.logger.info(ch_del_sql, log_type=NORMAL_LOG)
+                        self.table_batch_id[clear_table] = batch_id
+                        # update specified partition or table
+                        partition = properties.get('partition', None)
+                        cluster_name = properties.get('cluster_name', None)
+                        if partition:
+                            ch_del_sql = "ALTER TABLE %s {cluster} DROP PARTITION %s" % (clear_table, partition)
+                        else:
+                            ch_del_sql = "TRUNCATE TABLE %s {cluster}" % clear_table
 
-                self.update_lock.release()
+                        if cluster_name:
+                            ch_del_sql = ch_del_sql.format(cluster=f"ON CLUSTER {cluster_name}")
+                        else:
+                            ch_del_sql = ch_del_sql.format(cluster="")
 
-    def truncate_table(self):
-        pass
-
-    def drop_partition(self, partition, cluster_name):
-        self.ch_client.execute()
-        pass
+                        self.ch_client.execute(ch_del_sql)
+                        self.logger.info(ch_del_sql, log_type=NORMAL_LOG)
+                        sleep(3)

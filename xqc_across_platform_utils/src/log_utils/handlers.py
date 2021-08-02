@@ -116,7 +116,7 @@ class TimedAndSizeRotatingHandler(TimedRotatingFileHandler):
         # get next rotation filename
         dfn = self.rotation_filename(
             self.baseFilename + "."
-            + time.strftime(self.suffix, timeTuple) + "." + self.fileCount
+            + time.strftime(self.suffix, timeTuple) + "." + str(self.fileCount)
         )
         if os.path.exists(dfn):
             os.remove(dfn)

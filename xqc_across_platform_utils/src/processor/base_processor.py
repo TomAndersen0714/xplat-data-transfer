@@ -27,15 +27,21 @@ class BaseMsgProcessor(metaclass=ABCMeta):
         content = msg.data()
         properties = msg.properties()
         msg_id = msg.message_id()
+        topic = msg.topic_name()
         target_table = properties.get('target_table', None)
+        self.logger.info(f'Processing message: {msg_id}', log_type=NORMAL_LOG)
 
-        # clear specified table or partition
-        self.clear_table(properties)
+        # clear specified table or partition if necessary
+        try:
+            self.clear_table(properties)
+        except Exception as e:
+            self.logger.error(str(e), log_type=NORMAL_LOG)
+            self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties), log_type=BAD_MSG_LOG)
+            return
 
         # deserialize the data from message
         if target_table:
             try:
-                self.logger.info(f'Processing message: {msg_id}', log_type=NORMAL_LOG)
                 rows_bytes_list = pickle.loads(content)
                 msg_rows_list = [pickle.loads(rows_bytes_list[i])
                                  for i in range(len(rows_bytes_list))]
@@ -43,8 +49,7 @@ class BaseMsgProcessor(metaclass=ABCMeta):
                 # if pickle module cannot deserialize the message, dump it to bad_message log
                 # and process next message
                 self.logger.error(str(e), log_type=NORMAL_LOG)
-                self.logger.error(str(msg_id) + ' - ' + str(properties) +
-                                  ': ' + str(content), log_type=BAD_MSG_LOG)
+                self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties), log_type=BAD_MSG_LOG)
                 return
 
             # if pickle module deserialize message successfully, dump it to wal log
@@ -68,10 +73,10 @@ class BaseMsgProcessor(metaclass=ABCMeta):
             # raise TypeError('Target table is not specified!')
             # the properties of message doesn't contain 'target_table'
             self.logger.error('Target table is not specified in properties! ' +
-                              str(msg_id) + ' - ' + str(properties), log_type=NORMAL_LOG)
+                              str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties), log_type=NORMAL_LOG)
             # dump this message to bad message log
-            self.logger.error(str(msg_id) + ' - ' + str(properties) +
-                              ': ' + str(content), log_type=BAD_MSG_LOG)
+            self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties), log_type=BAD_MSG_LOG)
+        self.logger.info(f'Message: {msg_id} processing completed.', log_type=NORMAL_LOG)
 
     @abstractmethod
     def flush_cache_to_db(self):
