@@ -83,6 +83,6 @@ class ClickHouseProcessor(BaseMsgProcessor):
                         else:
                             ch_del_sql = ch_del_sql.format(cluster="")
 
-                        self.ch_client.execute(ch_del_sql)
                         self.logger.info(ch_del_sql, log_type=NORMAL_LOG)
+                        self.ch_client.execute(ch_del_sql)
                         sleep(3)

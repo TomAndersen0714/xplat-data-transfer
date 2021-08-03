@@ -35,8 +35,10 @@ class BaseMsgProcessor(metaclass=ABCMeta):
         try:
             self.clear_table(properties)
         except Exception as e:
-            self.logger.error(str(e), log_type=NORMAL_LOG)
-            self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties), log_type=BAD_MSG_LOG)
+            self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties) + '\n' + str(e),
+                              log_type=NORMAL_LOG)
+            self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
+                              log_type=BAD_MSG_LOG)
             return
 
         # deserialize the data from message
@@ -48,8 +50,10 @@ class BaseMsgProcessor(metaclass=ABCMeta):
             except Exception as e:
                 # if pickle module cannot deserialize the message, dump it to bad_message log
                 # and process next message
-                self.logger.error(str(e), log_type=NORMAL_LOG)
-                self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties), log_type=BAD_MSG_LOG)
+                self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties) + '\n' + str(e),
+                                  log_type=NORMAL_LOG)
+                self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
+                                  log_type=BAD_MSG_LOG)
                 return
 
             # if pickle module deserialize message successfully, dump it to wal log
@@ -73,9 +77,11 @@ class BaseMsgProcessor(metaclass=ABCMeta):
             # raise TypeError('Target table is not specified!')
             # the properties of message doesn't contain 'target_table'
             self.logger.error('Target table is not specified in properties! ' +
-                              str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties), log_type=NORMAL_LOG)
+                              str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
+                              log_type=NORMAL_LOG)
             # dump this message to bad message log
-            self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties), log_type=BAD_MSG_LOG)
+            self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
+                              log_type=BAD_MSG_LOG)
         self.logger.info(f'Message: {msg_id} processing completed.', log_type=NORMAL_LOG)
 
     @abstractmethod

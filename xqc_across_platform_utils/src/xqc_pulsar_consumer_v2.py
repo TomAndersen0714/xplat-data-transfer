@@ -23,7 +23,7 @@ def flush_cache_to_db(msg_processors):
     """
     Flush the all cached data into corresponding database.
     """
-    logging.info('Trying to flush all cached data to corresponding database.')
+    # logging.info('Trying to flush all cached data to corresponding database.')
     for _, processor in msg_processors.items():
         try:
             if processor:

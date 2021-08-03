@@ -21,7 +21,6 @@ fmt_without_timestamp = logging.Formatter(
 )
 
 
-
 def check_and_make_dir(base_path):
     if os.path.exists(base_path):
         logging.info(f"'{base_path}' already exists!")
@@ -55,8 +54,12 @@ def init_root_logger(
     Set basic config for root logger to store sys runtime log.
     """
 
+    # check the file and directory path
+    check_and_make_dir(base_path)
+
     # set the basic config for root logger
     base_file = os.path.join(base_path, filename)
+
     handler = TimedRotatingFileHandler(
         filename=base_file, when=when, backupCount=backupCount, encoding=encoding
     )
