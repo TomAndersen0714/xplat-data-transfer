@@ -2,7 +2,7 @@ from airflow import DAG
 from airflow.contrib.operators.clickhouse_to_pulsar import ClickHouseToPulsarOperator
 from datetime import datetime, timedelta
 
-ch_conn_id = 'cd2_clickhouse'
+ch_conn_id = 'cdh2_clickhouse'
 ch_source_table = 'tmp.truncate_test_all'
 ch_dest_table = 'tmp.truncate_test_all'
 

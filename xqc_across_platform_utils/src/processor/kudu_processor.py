@@ -1,37 +1,29 @@
-#!/usr/bin/python3
 import logging
 import pickle
+import kudu
 
-from clickhouse_driver import Client
 from pulsar import Message
-
+from typing import Dict, List
 from log_utils.log_types import *
 from .base_processor import BaseMsgProcessor
 
 
-class ClickHouseProcessor(BaseMsgProcessor):
+class KuduProcessor(BaseMsgProcessor):
 
     def __init__(
-            self, ch_host, ch_port, insert_batch_rows=10000, logger=logging.root,
+            self, kudu_host='localhost', kudu_port=7051,
+            batch_rows=50000, logger=logging.root,
             *args, **kwargs
     ):
-        super(ClickHouseProcessor, self).__init__(
-            insert_batch_rows=insert_batch_rows, logger=logger, name='clickhouse', *args, **kwargs)
-        self.cluster_name = kwargs.get('ch_cluster_name', 'cluster_3s_2r')
-        self.ch_client = Client(ch_host, ch_port)
-
-    def insert_data_with_tuple_list(self, table_name, rows_list) -> int:
-        """
-        Insert data into database(e.g. [{'a': 3, 'b': 'Tom'}], [(3,'Tom')]).
-        """
-
-        sql = f"insert into {table_name} values "
-        insert_count = self.ch_client.execute(sql, rows_list)
-        # print('insert into table %s: %d rows' % (table_name, insert_count))
-        self.logger.info(
-            'Insert into table %s: %d rows' % (table_name, insert_count), log_type=NORMAL_LOG
+        BaseMsgProcessor.__init__(
+            self, insert_batch_rows=batch_rows, logger=logger, name='impala',
+            *args, **kwargs
         )
-        return insert_count
+        self.kudu_rpc_host = kudu_host
+        self.kudu_rpc_port = kudu_port
+        self.kudu_client = kudu.connect(
+            self.kudu_rpc_host, self.kudu_rpc_port
+        )
 
     def process_msg(self, msg: Message):
         """ Process every message. """
@@ -42,10 +34,19 @@ class ClickHouseProcessor(BaseMsgProcessor):
         msg_id = msg.message_id()
         topic = msg.topic_name()
         target_table = properties.get('target_table', None)
-        self.logger.info(f'Processing message: {msg_id}', log_type=NORMAL_LOG)
+        self.logger.info(f'Message: {msg_id} is being processed.', log_type=NORMAL_LOG)
 
         # deserialize the data from message
         if target_table:
+            # if target table does not exist
+            if not self.kudu_client.table_exists(target_table):
+                self.logger.error(
+                    f"Target table '{target_table}' does not exist! \n" +
+                    str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
+                    log_type=NORMAL_LOG
+                )
+                return
+
             try:
                 rows_bytes_list = pickle.loads(content)
                 msg_rows_list = [pickle.loads(rows_bytes_list[i])
@@ -77,32 +78,48 @@ class ClickHouseProcessor(BaseMsgProcessor):
                 self.flush_cache_to_db()
 
         else:
-            # the properties of message doesn't contain 'target_table'
             self.logger.error('Target table is not specified in properties! ' +
                               str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
                               log_type=NORMAL_LOG)
-            # dump this message to bad message log
             self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
                               log_type=BAD_MSG_LOG)
+
         self.logger.info(f'Message: {msg_id} processing completed.', log_type=NORMAL_LOG)
 
     def flush_cache_to_db(self):
-        """
-        Flush cached data into database.
-        """
+        """ Flush cached data into database, only support upsert operation now. """
 
-        # self.logger.info('Trying to flush cached data to ClickHouse!', log_type=NORMAL_LOG)
         table_names = list(self._rows_cache_dict.keys())
         if len(table_names) == 0:
-            # self.logger.info('The cache is empty, and there is no data to flush.', log_type=NORMAL_LOG)
             return
+
         for tbl in table_names:
-            # what if some insertion failed?
             rows = self._rows_cache_dict.pop(tbl)
-            try:
-                res = self.insert_data_with_tuple_list(tbl, rows)
-                self._cache_rows_count -= res
-            except Exception as e:
-                # if insertion failed, dump the dirty data to dirty log
-                self.logger.error('Insertion failed!' + '\n' + str(e), log_type=NORMAL_LOG)
-                self.logger.error(tbl + ': ' + str(rows), log_type=DIRTY_LOG)
+            res = self.upsert_data_with_dict_list(tbl, rows)
+            self._cache_rows_count -= res
+
+    def upsert_data_with_dict_list(self, tbl, records: List[Dict]) -> int:
+        """ Upsert data into specified table. """
+
+        if not records:
+            return 0
+        if not self.kudu_client.table_exists(tbl):
+            self.logger.error(f"Table {tbl} does not exist!")
+            return len(records)
+
+        # open specified table and add all write operation into kudu session
+        kudu_session = self.kudu_client.new_session(flush_mode='manual')
+        kudu_table = self.kudu_client.table(tbl)
+        count = len(records)
+        for record in records:
+            kudu_session.apply(kudu_table.new_upsert(record))
+
+        # flush all cached write operation into database
+        try:
+            kudu_session.flush()
+            self.logger.info(f"Upsert into table {tbl}: {count} rows", log_type=NORMAL_LOG)
+        except Exception as e:
+            self.logger.error(f"Insertion failed!\n{e}", log_type=NORMAL_LOG)
+            # self.logger.error(f"{tbl}: {records}", log_type=DIRTY_LOG)
+        finally:
+            return count

@@ -55,7 +55,16 @@ def init_root_logger(
     """
 
     # check the file and directory path
-    check_and_make_dir(base_path)
+    if os.path.exists(base_path):
+        print(f"'{base_path}' already exists!")
+        if not os.path.isdir(base_path):
+            raise FileExistsError(f"'{base_path}' is not directory!")
+    else:
+        try:
+            os.makedirs(base_path)
+        except Exception as e:
+            print(str(e))
+            sys.exit(-1)
 
     # set the basic config for root logger
     base_file = os.path.join(base_path, filename)

@@ -6,6 +6,8 @@
   "insert_batch_rows": "30000",
   "ch_host": "10.20.133.149",
   "ch_port": "19000",
+  "kudu_host": "zjk-bigdata002",
+  "kudu_port": "7051",
   "timeout_millis": 15000,
   "base_path": "/data2/tmp/xqc_sync"
 }

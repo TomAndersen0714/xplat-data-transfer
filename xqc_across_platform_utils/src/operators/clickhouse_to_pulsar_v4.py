@@ -48,7 +48,6 @@ class ClickHouseToPulsarOperator(BaseOperator):
         self.max_msg_byte_size = max_msg_byte_size
         # max message byte size can only be adjusted on Pulsar server side(default, 5MB).
         self.cache_rows = cache_rows
-        self._kwargs = kwargs
         self.header = header
         self.ch_hook = ClickHouseHook(self.ch_conn_id)
         self.pulsar_hook = PulsarHook(self.pulsar_conn_id, self.topic)

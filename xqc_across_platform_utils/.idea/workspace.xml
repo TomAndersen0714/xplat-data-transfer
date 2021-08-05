@@ -1,11 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d9a45bdb-a573-41ab-bd3b-f3549812ec89" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/dags/jd_to_tb_clickhouse_demo_v2.py" afterDir="false" />
+    <list default="true" id="d9a45bdb-a573-41ab-bd3b-f3549812ec89" name="Default Changelist" comment="update xqc v2">
+      <change afterPath="$PROJECT_DIR$/src/hooks/pulsar_hook_v7.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/processor/kudu_processor.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/xqc_pulsar_consumer_v3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/TomAndersen.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dictionaries/TomAndersen.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conf/clickhouse_msg_header_demo.py" beforeDir="false" afterPath="$PROJECT_DIR$/conf/clickhouse_msg_header_demo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dags/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/xqc_across_platform_utils.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/xqc_across_platform_utils.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/all_platform_to_tb.json" beforeDir="false" afterPath="$PROJECT_DIR$/conf/all_platform_to_tb.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/conf/local_multi_thread_test_demo.json" beforeDir="false" afterPath="$PROJECT_DIR$/conf/local_multi_thread_test_demo.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dags/jd_to_tb_clickhouse_demo_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/dags/jd_to_tb_clickhouse_demo_v2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/log_utils/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/log_utils/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/operators/clickhouse_to_pulsar_v4.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/operators/clickhouse_to_pulsar_v4.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/processor/base_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/processor/base_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/processor/clickhouse_processor.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/processor/clickhouse_processor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/processor/clickhouse_processor_v1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/processor/clickhouse_processor_v1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/clickhouse_to_pulsar_opt_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test_v1.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test_v1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test_v2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_test_v3.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_test_v3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/pulsar_to_clickhouse_opt_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/dag/pulsar_to_clickhouse_opt_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/pulsar_hook_consume_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/pulsar_hook_produce_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/pulsar_to_clickhouse_opt_test.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/test_consumer_consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/test_local_consumer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,12 +36,24 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/dags/jd_to_tb_clickhouse_demo_v2.py">
+        <entry file="file://$PROJECT_DIR$/src/processor/clickhouse_processor_v1.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="43" column="1" lean-forward="true" selection-start-line="43" selection-start-column="1" selection-end-line="43" selection-end-column="1" />
+            <state relative-caret-position="291">
+              <caret line="35" column="12" lean-forward="true" selection-start-line="35" selection-start-column="12" selection-end-line="35" selection-end-column="12" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#19#33#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/operators/impala_to_pulsar.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="341">
+              <caret line="116" column="21" lean-forward="true" selection-start-line="116" selection-start-column="21" selection-end-line="117" selection-end-column="33" />
+              <folding>
+                <element signature="e#879#892#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -38,36 +70,36 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>xinghuan_mc_shop_mongo_to_ch</find>
-      <find>xinghuan_mc_company_mongo_to_ch</find>
-      <find>truncate_xinghuan_mc_company_local</find>
-      <find>flatten_map</find>
-      <find>chengcheng</find>
-      <find>dag</find>
-      <find>lamb</find>
-      <find>timestamp_default_mapper</find>
-      <find>aggregate_query=None,</find>
-      <find>add_extra_column</find>
-      <find>timestamp</find>
-      <find>batch_id</find>
+      <find>column</find>
+      <find>table_batch_id</find>
+      <find>if len(table_names) == 0:</find>
+      <find>wal</find>
+      <find>pop</find>
+      <find>self.logger.error(</find>
+      <find>dict</find>
+      <find>source_table</find>
       <find>cluster_name</find>
-      <find>cluster</find>
-      <find>partitionn</find>
-      <find>self.fileCount</find>
-      <find>fileCount</find>
-      <find>__exit__</find>
-      <find>bad_</find>
-      <find>url</find>
-      <find>BAD_MSG_LOG</find>
+      <find>exist</find>
+      <find>does not exist!</find>
+      <find>does not exist</find>
+      <find>cd2_clickhouse</find>
+      <find>start_date</find>
+      <find>end_date</find>
+      <find>all</find>
+      <find>source</find>
       <find>header</find>
-      <find>merge</find>
-      <find>owner</find>
-      <find>P</find>
-      <find>partition</find>
-      <find>Trying to flush all cached data to corresponding database</find>
-      <find>par</find>
-      <find>type</find>
-      <find>'\n' +</find>
+      <find>str</find>
+      <find>impala_sql</find>
+      <find>imp_sql</find>
+      <find>columns:</find>
+      <find>Shared</find>
+      <find>Subscribing to</find>
+      <find>already exists!</find>
+      <find>Sending</find>
+      <find>Processing message</find>
+      <find>processing</find>
+      <find>process</find>
+      <find>Message: {msg_id}</find>
     </findStrings>
     <replaceStrings>
       <replace>batch_total</replace>
@@ -84,24 +116,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/dags/jd/task_record_mongo_sync_to_ch_and_pulsar_daily.py" />
-        <option value="$PROJECT_DIR$/src/processor/__init__.py" />
-        <option value="$PROJECT_DIR$/src/log_utils/filters/log_filters.py" />
-        <option value="$PROJECT_DIR$/conf/xqc_config_local_test_demo.json" />
-        <option value="$PROJECT_DIR$/src/log_utils/log_types.py" />
-        <option value="$PROJECT_DIR$/src/dags/mini/mini_daily_xdata.py" />
-        <option value="$PROJECT_DIR$/src/dags/shuxiaoxiao/mini_daily_xdata_to_tb.py" />
-        <option value="$PROJECT_DIR$/src/dags/shuxiaoxiao/tb_daily_xdata.py" />
-        <option value="$PROJECT_DIR$/src/dags/test/test_producer_local.py" />
-        <option value="$PROJECT_DIR$/src/xqc_pulsar_consumer_v4.py" />
-        <option value="$PROJECT_DIR$/src/log_utils/filters.py" />
-        <option value="$PROJECT_DIR$/conf/local_test_demo.json" />
-        <option value="$PROJECT_DIR$/src/test/test_timedandsizerotatinghandler.py" />
-        <option value="$PROJECT_DIR$/src/xqc_pulsar_consumer_v5.py" />
-        <option value="$PROJECT_DIR$/conf/local_multi_thread_test_demo.json" />
-        <option value="$PROJECT_DIR$/src/dags/shuxiaoxiao/jd_daily_xdata_sync_to_tb.py" />
-        <option value="$PROJECT_DIR$/src/README.md" />
-        <option value="$PROJECT_DIR$/src/dags/shuxiaoxiao/mini_daily_xdata_sync_to_tb_v1.py" />
         <option value="$PROJECT_DIR$/src/dags/shuxiaoxiao/mini_daily_xdata_sync_to_tb.py" />
         <option value="$PROJECT_DIR$/src/dags/mini-qc/mini_qc_sync_to_tb_daily.py" />
         <option value="$PROJECT_DIR$/src/dags/mini-qc/xinghuan_mc_company_shop_sync_to_tb_daily.py" />
@@ -112,7 +126,6 @@
         <option value="$PROJECT_DIR$/src/test/test_producer_mini_send_tb.py" />
         <option value="$PROJECT_DIR$/src/test/test_logger.py" />
         <option value="$PROJECT_DIR$/src/log_utils/loggers.py" />
-        <option value="$PROJECT_DIR$/src/processor/clickhouse_processor.py" />
         <option value="$PROJECT_DIR$/src/dags/mini-qc/cross_platform_sync_to_tb_daily.py" />
         <option value="$PROJECT_DIR$/src/dags/mini/kefu_stat_mongo_sync_to_ch_and_pulsar_daily.py" />
         <option value="$PROJECT_DIR$/src/dags/tb/xqc_dim_table_sync_to_tb.py" />
@@ -121,20 +134,39 @@
         <option value="$PROJECT_DIR$/src/test/test_producer_local.py" />
         <option value="$PROJECT_DIR$/conf/xqc_msg_header_demo.py" />
         <option value="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test_v3.py" />
-        <option value="$PROJECT_DIR$/src/xqc_pulsar_consumer_v3.py" />
-        <option value="$PROJECT_DIR$/src/processor/kudu_processor.py" />
-        <option value="$PROJECT_DIR$/src/processor/impala_processor.py" />
-        <option value="$PROJECT_DIR$/src/log_utils/__init__.py" />
         <option value="$PROJECT_DIR$/src/xqc_pulsar_consumer_v2.py" />
-        <option value="$PROJECT_DIR$/src/processor/clickhouse_processor_v1.py" />
-        <option value="$PROJECT_DIR$/src/processor/base_processor.py" />
         <option value="$PROJECT_DIR$/conf/all.json" />
         <option value="$PROJECT_DIR$/src/dags/demo_v2.py" />
         <option value="$PROJECT_DIR$/src/dags/to_clickhouse_demo_v2.py" />
         <option value="$PROJECT_DIR$/src/dags/jd_to_tb_clickhouse_v2_demo.py" />
-        <option value="$PROJECT_DIR$/conf/all_platform_to_tb.json" />
-        <option value="$PROJECT_DIR$/src/dags/jd_to_tb_clickhouse_demo_v2.py" />
         <option value="$PROJECT_DIR$/conf/clickhouse_msg_header_demo.py" />
+        <option value="$PROJECT_DIR$/src/dags/jd_to_tb_clickhouse_demo_v2.py" />
+        <option value="$PROJECT_DIR$/src/test/impala_opt_test.py" />
+        <option value="$PROJECT_DIR$/src/operators/clickhouse_to_pulsar_v4.py" />
+        <option value="$PROJECT_DIR$/conf/impala_msg_header_demo.py" />
+        <option value="$PROJECT_DIR$/src/processor/impala_processor.py" />
+        <option value="$PROJECT_DIR$/src/processor/base_processor.py" />
+        <option value="$PROJECT_DIR$/src/processor/clickhouse_processor.py" />
+        <option value="$PROJECT_DIR$/conf/all_platform_to_tb.json" />
+        <option value="$PROJECT_DIR$/conf/kudu_msg_header_demo.py" />
+        <option value="$PROJECT_DIR$/conf/local_multi_thread_test_demo.json" />
+        <option value="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test.py" />
+        <option value="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test_v1.py" />
+        <option value="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test_v2.py" />
+        <option value="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_test_v3.py" />
+        <option value="$PROJECT_DIR$/src/test/dag/pulsar_to_clickhouse_opt_test.py" />
+        <option value="$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/-1186615944/airflow/contrib/hooks/pulsar_hook.py" />
+        <option value="$PROJECT_DIR$/src/operators/clickhouse_to_pulsar_v5.py" />
+        <option value="$PROJECT_DIR$/src/hooks/pulsar_hook_v7.py" />
+        <option value="$PROJECT_DIR$/conf/local__kudu_test_demo.json" />
+        <option value="$PROJECT_DIR$/src/log_utils/__init__.py" />
+        <option value="$PROJECT_DIR$/src/xqc_pulsar_consumer_v3.py" />
+        <option value="$PROJECT_DIR$/src/test/test_local_consumer.py" />
+        <option value="$PROJECT_DIR$/src/test/dag/impala_to_pulsar_test.py" />
+        <option value="$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/contrib/operators/impala_to_pulsar.py" />
+        <option value="$PROJECT_DIR$/src/operators/impala_to_pulsar.py" />
+        <option value="$PROJECT_DIR$/src/processor/kudu_processor.py" />
+        <option value="$PROJECT_DIR$/src/processor/clickhouse_processor_v1.py" />
       </list>
     </option>
   </component>
@@ -151,7 +183,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -179,7 +210,38 @@
               <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
               <item name="xqc_across_platform_utils" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="hooks" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="xqc_across_platform_utils" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="log_utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="xqc_across_platform_utils" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="operators" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="xqc_across_platform_utils" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="processor" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="xqc_across_platform_utils" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="xqc_across_platform_utils" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="dag" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
@@ -190,10 +252,95 @@
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
               <item name="&lt; Remote Python 3.6.8 (sftp://root@cdh2:22/home/worker/airflow_venv/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
             </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Remote Python 3.6.8 (sftp://root@cdh2:22/home/worker/airflow_venv/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="1614232658" type="d76c9d6b:PyRemoteLibrariesNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Remote Python 3.6.8 (sftp://root@cdh2:22/home/worker/airflow_venv/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="1614232658" type="d76c9d6b:PyRemoteLibrariesNode" />
+              <item name="-1186615944" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Remote Python 3.6.8 (sftp://root@cdh2:22/home/worker/airflow_venv/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="1614232658" type="d76c9d6b:PyRemoteLibrariesNode" />
+              <item name="-1186615944" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
+              <item name="airflow" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Remote Python 3.6.8 (sftp://root@cdh2:22/home/worker/airflow_venv/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="1614232658" type="d76c9d6b:PyRemoteLibrariesNode" />
+              <item name="-1186615944" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
+              <item name="airflow" type="462c0819:PsiDirectoryNode" />
+              <item name="contrib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Remote Python 3.6.8 (sftp://root@cdh2:22/home/worker/airflow_venv/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="1614232658" type="d76c9d6b:PyRemoteLibrariesNode" />
+              <item name="-1186615944" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
+              <item name="airflow" type="462c0819:PsiDirectoryNode" />
+              <item name="contrib" type="462c0819:PsiDirectoryNode" />
+              <item name="operators" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Remote Python 3.6.8 (sftp://root@cdh2:22/home/worker/airflow_venv/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="1614232658" type="d76c9d6b:PyRemoteLibrariesNode" />
+              <item name="1443670326" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Remote Python 3.6.8 (sftp://root@cdh2:22/home/worker/airflow_venv/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="1614232658" type="d76c9d6b:PyRemoteLibrariesNode" />
+              <item name="1443670326" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
+              <item name="airflow" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Remote Python 3.6.8 (sftp://root@cdh2:22/home/worker/airflow_venv/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="1614232658" type="d76c9d6b:PyRemoteLibrariesNode" />
+              <item name="1443670326" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
+              <item name="airflow" type="462c0819:PsiDirectoryNode" />
+              <item name="contrib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Remote Python 3.6.8 (sftp://root@cdh2:22/home/worker/airflow_venv/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="1614232658" type="d76c9d6b:PyRemoteLibrariesNode" />
+              <item name="1443670326" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
+              <item name="airflow" type="462c0819:PsiDirectoryNode" />
+              <item name="contrib" type="462c0819:PsiDirectoryNode" />
+              <item name="hooks" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="xqc_across_platform_utils" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Remote Python 3.6.8 (sftp://root@cdh2:22/home/worker/airflow_venv/bin/python3) &gt;" type="70bed36:NamedLibraryElementNode" />
+              <item name="1614232658" type="d76c9d6b:PyRemoteLibrariesNode" />
+              <item name="1443670326" type="788ab980:PyRemoteLibrariesNode$PyRemoteRootNode" />
+              <item name="airflow" type="462c0819:PsiDirectoryNode" />
+              <item name="contrib" type="462c0819:PsiDirectoryNode" />
+              <item name="operators" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -205,19 +352,19 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\conf" />
+      <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src\hooks" />
+      <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src\operators" />
+      <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src" />
+      <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src\test\dag" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src\test\dag" />
       <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src" />
       <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src\dags\shuxiaoxiao" />
       <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src\log_utils" />
       <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src\log_utils\filters" />
-      <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src\log_utils\handlers" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\conf" />
-      <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src" />
-      <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src\test\dag" />
-      <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src\test" />
-      <recent name="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src\processor" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -232,8 +379,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.test_producer_local">
-    <configuration name="test_consumer_consumer" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.xqc_pulsar_consumer_v3">
+    <configuration name="impala_opt_test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="xqc_across_platform_utils" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -246,7 +393,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/test/test_consumer_consumer.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/test/impala_opt_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -255,7 +402,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test_logger" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="test_local_consumer" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="xqc_across_platform_utils" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -268,7 +415,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/test/test_logger.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/test/test_local_consumer.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -299,28 +446,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test_timedandsizerotatinghandler" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="xqc_across_platform_utils" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/test" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="C:\Users\DELL\Desktop\PyCharmProjects\xiaoduo\xqc_across_platform_utils\src\test\test_logger.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="xqc_pulsar_consumer_v2" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="xqc_across_platform_utils" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -343,25 +468,48 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="xqc_pulsar_consumer_v3" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="xqc_across_platform_utils" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/xqc_pulsar_consumer_v3.py" />
+      <option name="PARAMETERS" value="../conf/local_kudu_test_demo.json" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Python.test_producer_local" />
       <item itemvalue="Python.xqc_pulsar_consumer_v2" />
-      <item itemvalue="Python.test_timedandsizerotatinghandler" />
-      <item itemvalue="Python.test_logger" />
-      <item itemvalue="Python.test_consumer_consumer" />
+      <item itemvalue="Python.impala_opt_test" />
+      <item itemvalue="Python.test_local_consumer" />
+      <item itemvalue="Python.xqc_pulsar_consumer_v3" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.xqc_pulsar_consumer_v3" />
+        <item itemvalue="Python.test_local_consumer" />
+        <item itemvalue="Python.impala_opt_test" />
         <item itemvalue="Python.test_producer_local" />
         <item itemvalue="Python.xqc_pulsar_consumer_v2" />
-        <item itemvalue="Python.test_consumer_consumer" />
-        <item itemvalue="Python.test_logger" />
-        <item itemvalue="Python.test_timedandsizerotatinghandler" />
       </list>
     </recent_temporary>
   </component>
   <component name="StructureViewFactory">
     <option name="AUTOSCROLL_FROM_SOURCE" value="true" />
+    <option name="ACTIVE_ACTIONS" value=",ALPHA_COMPARATOR" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -383,7 +531,8 @@
       <workItem from="1627350948618" duration="59665000" />
       <workItem from="1627610763517" duration="14313000" />
       <workItem from="1627782725036" duration="1886000" />
-      <workItem from="1627868813137" duration="24361000" />
+      <workItem from="1627868813137" duration="71133000" />
+      <workItem from="1628156427813" duration="14497000" />
     </task>
     <task id="LOCAL-00001" summary="upload xqc tools v2">
       <created>1626523438569</created>
@@ -441,11 +590,32 @@
       <option name="project" value="LOCAL" />
       <updated>1627956356387</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="update xqc v2">
+      <created>1627959844921</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1627959844921</updated>
+    </task>
+    <task id="LOCAL-00010" summary="update xqc v2">
+      <created>1627959923775</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1627959923775</updated>
+    </task>
+    <task id="LOCAL-00011" summary="update xqc v2">
+      <created>1627960942362</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1627960942362</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="437290000" />
+    <option name="totallyTimeSpent" value="498559000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -460,13 +630,13 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.3734756" visible="true" weight="0.2645074" />
-      <window_info id="Structure" order="1" sideWeight="0.6265244" side_tool="true" weight="0.21255061" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.37195122" visible="true" weight="0.2645074" />
+      <window_info id="Structure" order="1" sideWeight="0.6280488" side_tool="true" weight="0.2645074" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3292683" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.44359756" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.5243902" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.38567072" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3292683" />
@@ -474,7 +644,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="File Transfer" order="9" weight="0.18902439" />
       <window_info anchor="bottom" id="Database Changes" order="10" />
-      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49932525" visible="true" weight="0.23018293" />
+      <window_info anchor="bottom" id="Terminal" order="11" sideWeight="0.49932525" weight="0.43292683" />
       <window_info anchor="bottom" id="Event Log" order="12" sideWeight="0.5006748" side_tool="true" weight="0.3292683" />
       <window_info anchor="bottom" id="Python Console" order="13" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -517,24 +687,29 @@
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/processor/clickhouse_processor.py</url>
-          <line>46</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/xqc_pulsar_consumer_v2.py</url>
           <line>196</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/processor/clickhouse_processor_v1.py</url>
-          <line>56</line>
+          <line>128</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/src/processor/clickhouse_processor_v1.py</url>
-          <line>59</line>
+          <line>131</line>
           <option name="timeStamp" value="15" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/processor/kudu_processor.py</url>
+          <line>31</line>
+          <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/xqc_pulsar_consumer_v3.py</url>
+          <line>224</line>
+          <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -543,25 +718,37 @@
         <watch expression="properties" language="Python" />
         <watch expression="str(e)" language="Python" />
         <watch expression="self.table_batch_id" language="Python" />
-        <watch expression="self.table_batch_id[clear_table]" language="Python" />
-        <watch expression="ch_del_sql" language="Python" />
+        <watch expression="rows" language="Python" />
       </configuration>
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/xqc_across_platform_utils$test_consumer_consumer.coverage" NAME="test_consumer_consumer Coverage Results" MODIFIED="1627632650056" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
-    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$xqc_pulsar_consumer_v4.coverage" NAME="xqc_pulsar_consumer_v4 Coverage Results" MODIFIED="1627010910727" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
-    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$xqc_pulsar_consumer.coverage" NAME="xqc_pulsar_consumer Coverage Results" MODIFIED="1626320151622" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/xqc_across_platform_utils$xqc_pulsar_consumer_v5.coverage" NAME="xqc_pulsar_consumer_v5 Coverage Results" MODIFIED="1627440484645" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
-    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$test_logger.coverage" NAME="test_logger Coverage Results" MODIFIED="1627573708657" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
     <SUITE FILE_PATH="coverage/xqc_across_platform_utils$serialization_deserializeation_benchmark.coverage" NAME="serialization_deserializeation_benchmark Coverage Results" MODIFIED="1626007861926" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/dags/test" />
-    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$test_producer_local.coverage" NAME="test_producer_local Coverage Results" MODIFIED="1627633766745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
-    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$xqc_pulsar_consumer_v2.coverage" NAME="xqc_pulsar_consumer_v2 Coverage Results" MODIFIED="1627633280125" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$impala_opt_test.coverage" NAME="impala_opt_test Coverage Results" MODIFIED="1627981301278" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$xqc_pulsar_consumer_v3.coverage" NAME="xqc_pulsar_consumer_v3 Coverage Results" MODIFIED="1628178249477" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/xqc_across_platform_utils$clickhouse_demo.coverage" NAME="clickhouse_demo Coverage Results" MODIFIED="1625794689449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/tmp/scripts" />
     <SUITE FILE_PATH="coverage/xqc_across_platform_utils$test_timedandsizerotatinghandler.coverage" NAME="test_timedandsizerotatinghandler Coverage Results" MODIFIED="1627375629328" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$xqc_pulsar_consumer_v4.coverage" NAME="xqc_pulsar_consumer_v4 Coverage Results" MODIFIED="1627010910727" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$xqc_pulsar_consumer.coverage" NAME="xqc_pulsar_consumer Coverage Results" MODIFIED="1626320151622" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$test_logger.coverage" NAME="test_logger Coverage Results" MODIFIED="1627573708657" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$test_producer_local.coverage" NAME="test_producer_local Coverage Results" MODIFIED="1627633766745" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$test_local_consumer.coverage" NAME="test_local_consumer Coverage Results" MODIFIED="1628178205340" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/test" />
+    <SUITE FILE_PATH="coverage/xqc_across_platform_utils$xqc_pulsar_consumer_v2.coverage" NAME="xqc_pulsar_consumer_v2 Coverage Results" MODIFIED="1627633280125" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
+      <expression>
+        <expression-string>rows</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>self.kudu_client.table_exists(target_table)</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>ch_del_sql</expression-string>
         <language-id>Python</language-id>
@@ -602,200 +789,117 @@
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>msg.properties()</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>str(e)</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/1614232658/_io.py">
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/clickhouse_driver/client.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="206">
-          <caret line="1277" column="8" selection-start-line="1277" selection-start-column="8" selection-end-line="1277" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1646052553/traceback.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#72#90#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1646052553/logging/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="404">
-          <caret line="1295" column="17" selection-start-line="1295" selection-start-column="17" selection-end-line="1295" selection-end-column="17" />
-          <folding>
-            <element signature="e#1189#1256#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1646052553/inspect.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="1494" column="4" selection-start-line="1494" selection-start-column="4" selection-end-line="1494" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dags/mini-qc/dialog_transfer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="316" selection-start-line="316" selection-end-line="316" />
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/1614232658/_pulsar.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/1614232658/_pulsar/ConsumerType.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="15" column="4" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/1614232658/_pulsar/Timeout.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="276">
-          <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
-          <folding>
-            <element signature="e#179#216#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1646052553/threading.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="368" column="6" selection-start-line="368" selection-start-column="6" selection-end-line="368" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dags/mini-qc/cross_platform_sync_to_tb_daily.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#40#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/contrib/operators/mongo_to_clickhouse_operator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="54" column="16" selection-start-line="54" selection-start-column="7" selection-end-line="54" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dags/mini/kefu_stat_mongo_sync_to_ch_and_pulsar_daily.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="203">
-          <caret line="103" selection-start-line="103" selection-end-line="109" selection-end-column="11" />
-          <folding>
-            <element signature="e#19#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1646052553/uuid.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="105" column="8" selection-start-line="105" selection-start-column="8" selection-end-line="105" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dags/tb/xqc_dim_table_sync_to_tb.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-124">
-          <caret line="47" lean-forward="true" selection-start-line="47" selection-end-line="47" />
-          <folding>
-            <element signature="e#2#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/log_utils/handlers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="35" column="35" lean-forward="true" selection-start-line="35" selection-start-column="35" selection-end-line="35" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/test_logger.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-161">
-          <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
-          <folding>
-            <element signature="e#19#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/log_utils/loggers.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
-          <folding>
-            <element signature="e#85#94#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/test_consumer_consumer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
-          <folding>
-            <element signature="e#19#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/conf/local_multi_thread_test_demo.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="10" column="1" lean-forward="true" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
+          <caret line="158" column="8" selection-start-line="158" selection-start-column="8" selection-end-line="158" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/typeshed/stdlib/2and3/threading.pyi">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="83" column="13" selection-start-line="83" selection-start-column="13" selection-end-line="83" selection-end-column="13" />
+        <state relative-caret-position="206">
+          <caret line="81" column="8" selection-start-line="81" selection-start-column="8" selection-end-line="81" selection-end-column="8" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/test_producer_local.py">
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/1614232658/kudu/client/Session.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="41" column="21" selection-start-line="41" selection-start-column="11" selection-end-line="41" selection-end-column="21" />
+        <state relative-caret-position="68">
+          <caret line="19" column="32" selection-start-line="19" selection-start-column="32" selection-end-line="19" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/processor/clickhouse_processor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1035">
+          <caret line="81" column="36" lean-forward="true" selection-start-line="81" selection-start-column="36" selection-end-line="81" selection-end-column="37" />
           <folding>
-            <element signature="e#20#33#0" expanded="true" />
+            <element signature="e#19#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test_v2.py">
+    <entry file="file://$PROJECT_DIR$/src/operators/clickhouse_to_pulsar_v2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="16" column="32" lean-forward="true" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
+        <state relative-caret-position="-207">
+          <caret line="15" column="46" selection-start-line="15" selection-start-column="46" selection-end-line="15" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/processor/impala_processor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="206">
+          <caret line="14" column="8" selection-start-line="14" selection-start-column="8" selection-end-line="14" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/xqc_pulsar_consumer_v2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1633">
+          <caret line="55" column="40" selection-start-line="55" selection-start-column="40" selection-end-line="55" selection-end-column="40" />
+          <folding>
+            <element signature="e#86#97#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/-1186615944/airflow/operators/python_operator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="88" column="41" selection-start-line="88" selection-start-column="41" selection-end-line="88" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/contrib/hooks/clickhouse_hook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
+          <caret line="67" column="8" selection-start-line="67" selection-start-column="8" selection-end-line="67" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/contrib/operators/mongo_to_impala_operator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="150" column="23" selection-start-line="150" selection-start-column="23" selection-end-line="150" selection-end-column="23" />
+          <folding>
+            <element signature="e#812#866#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/all_platform_to_tb.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="8" column="2" selection-start-line="8" selection-start-column="2" selection-end-line="9" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/python-skeletons/logging.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1646052553/logging/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2622" />
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/utils/log/logging_mixin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="25" column="11" lean-forward="true" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="4" column="29" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="29" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
@@ -804,197 +908,248 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_test_v3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="25" column="24" lean-forward="true" selection-start-line="25" selection-start-column="24" selection-end-line="25" selection-end-column="24" />
+        <state relative-caret-position="138">
+          <caret line="6" column="30" lean-forward="true" selection-start-line="6" selection-start-column="30" selection-end-line="6" selection-end-column="30" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test.py">
+    <entry file="file://$PROJECT_DIR$/src/test/clickhouse_to_pulsar_opt_test.py" />
+    <entry file="file://$PROJECT_DIR$/src/test/dag/pulsar_to_clickhouse_opt_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="460">
-          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+        <state relative-caret-position="92">
+          <caret line="4" column="30" lean-forward="true" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
           <folding>
             <element signature="e#0#23#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/processor/clickhouse_processor.py">
+    <entry file="file://$PROJECT_DIR$/src/test/pulsar_hook_consume_test.py" />
+    <entry file="file://$PROJECT_DIR$/src/test/test_consumer_jd_send_tb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="8" column="16" lean-forward="true" selection-start-line="8" selection-start-column="16" selection-end-line="8" selection-end-column="16" />
-          <folding>
-            <element signature="e#19#33#0" expanded="true" />
-          </folding>
-        </state>
+        <state relative-caret-position="-150" />
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/-1186615944/airflow/hooks/dbapi_hook.py">
+    <entry file="file://$PROJECT_DIR$/src/test/test_producer_mini_send_tb.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="204" column="8" selection-start-line="204" selection-start-column="8" selection-end-line="204" selection-end-column="8" />
-        </state>
+        <state relative-caret-position="-58" />
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/impala/hiveserver2.py">
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/models/dag.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="612">
-          <caret line="49" column="33" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
-          <folding>
-            <element signature="e#578#616#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/proc_dags/fill_daily_data.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-4162">
-          <caret line="140" column="10" selection-start-line="140" selection-start-column="5" selection-end-line="140" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#79#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/dev_dags/mini/mini_dags/etl_hourly.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1726">
-          <caret line="82" column="59" selection-start-line="82" selection-start-column="59" selection-end-line="82" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/hooks/dbapi_hook.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="290">
-          <caret line="208" column="24" selection-start-line="208" selection-start-column="24" selection-end-line="208" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/impala/dbapi.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="39" column="4" selection-start-line="39" selection-start-column="4" selection-end-line="39" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/processor/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/contrib/hooks/clickhouse_hook.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="57" column="47" lean-forward="true" selection-start-line="57" selection-start-column="47" selection-end-line="57" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/-1186615944/airflow/contrib/operators/impala_to_clickhouse.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1310">
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/clickhouse_driver/client.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="158" column="8" selection-start-line="158" selection-start-column="8" selection-end-line="158" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/xqc_pulsar_consumer_v3.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2739">
-          <caret line="95" lean-forward="true" selection-start-line="95" selection-end-line="95" />
-          <folding>
-            <element signature="e#86#97#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/xqc_pulsar_consumer_v2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="50" column="17" lean-forward="true" selection-start-line="50" selection-start-column="17" selection-end-line="50" selection-end-column="17" />
-          <folding>
-            <element signature="e#86#97#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/conf/impala_msg_header_demo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="10" column="24" lean-forward="true" selection-start-line="10" selection-start-column="24" selection-end-line="10" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/log_utils/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="92">
-          <caret line="34" column="20" selection-start-line="34" selection-start-column="20" selection-end-line="34" selection-end-column="20" />
-          <folding>
-            <element signature="e#19#42#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="360">
+          <caret line="218" column="36" lean-forward="true" selection-start-line="218" selection-start-column="36" selection-end-line="218" selection-end-column="36" />
         </state>
       </provider>
     </entry>
     <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/contrib/hooks/impala_hook.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="56" lean-forward="true" selection-start-line="56" selection-end-line="56" />
+        <state relative-caret-position="222">
+          <caret line="64" column="17" selection-start-line="64" selection-start-column="14" selection-end-line="64" selection-end-column="17" />
           <folding>
             <element signature="e#812#858#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/pulsar/__init__.py">
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/-1186615944/airflow/contrib/operators/impala_to_pulsar.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="206">
-          <caret line="213" column="8" selection-start-line="213" selection-start-column="8" selection-end-line="213" selection-end-column="8" />
-          <folding>
-            <element signature="e#2790#2804#0" expanded="true" />
-          </folding>
+          <caret line="38" column="32" selection-start-line="38" selection-start-column="32" selection-end-line="38" selection-end-column="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/processor/impala_processor.py">
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/contrib/hooks/pulsar_hook.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="27" column="8" selection-start-line="27" selection-start-column="8" selection-end-line="27" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="160">
+          <caret line="123" column="46" lean-forward="true" selection-start-line="123" selection-start-column="46" selection-end-line="123" selection-end-column="46" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/processor/clickhouse_processor_v1.py">
+    <entry file="file://$PROJECT_DIR$/src/operators/clickhouse_to_pulsar_v5.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-441">
-          <caret line="49" column="45" lean-forward="true" selection-start-line="49" selection-start-column="45" selection-end-line="49" selection-end-column="52" />
+        <state relative-caret-position="203">
+          <caret line="33" column="7" lean-forward="true" selection-start-line="33" selection-start-column="7" selection-end-line="33" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/-1186615944/airflow/contrib/hooks/pulsar_hook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1491">
+          <caret line="133" column="8" selection-start-line="133" selection-start-column="8" selection-end-line="133" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/hooks/pulsar_hook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-184">
+          <caret line="22" lean-forward="true" selection-start-line="22" selection-end-line="22" />
           <folding>
-            <element signature="e#19#33#0" expanded="true" />
+            <element signature="e#879#925#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/dags/shuxiaoxiao/jd_daily_xdata_sync_to_tb.py">
+    <entry file="file://$PROJECT_DIR$/src/hooks/pulsar_hook_v6.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="11" column="1" lean-forward="true" selection-start-line="11" selection-start-column="1" selection-end-line="11" selection-end-column="1" />
+          <folding>
+            <element signature="e#879#925#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/dags/jd_to_tb_clickhouse_demo_v2.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="92">
-          <caret line="28" column="10" lean-forward="true" selection-start-line="28" selection-start-column="10" selection-end-line="28" selection-end-column="10" />
+          <caret line="59" column="9" selection-start-line="59" selection-start-column="9" selection-end-line="59" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test_v2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="12" column="5" lean-forward="true" selection-start-line="12" selection-start-column="5" selection-end-line="12" selection-end-column="5" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test_v1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="19" column="26" lean-forward="true" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/contrib/operators/clickhouse_to_pulsar.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="175">
+          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/hooks/pulsar_hook_v7.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-392">
+          <caret line="110" column="11" lean-forward="true" selection-start-line="110" selection-start-column="11" selection-end-line="110" selection-end-column="11" />
+          <folding>
+            <element signature="e#879#890#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/-1186615944/airflow/contrib/hooks/impala_hook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="46">
+          <caret line="20" column="32" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/hooks/dbapi_hook.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="55" column="8" selection-start-line="55" selection-start-column="8" selection-end-line="55" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/local_multi_thread_test_demo.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/log_utils/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="112">
+          <caret line="65" column="25" lean-forward="true" selection-start-line="65" selection-start-column="25" selection-end-line="65" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/pulsar/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="109">
+          <caret line="588" column="44" selection-start-line="588" selection-start-column="32" selection-end-line="588" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/kudu_msg_header_demo.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="4" column="12" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/local_kudu_test_demo.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="5" column="29" lean-forward="true" selection-start-line="5" selection-start-column="29" selection-end-line="5" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/python_stubs/1614232658/kudu/client/Client.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="99">
+          <caret line="185" column="8" selection-start-line="185" selection-start-column="8" selection-end-line="185" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm2019.1/system/remote_sources/1614232658/1443670326/airflow/contrib/operators/impala_to_pulsar.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="226">
+          <caret line="107" column="32" lean-forward="true" selection-start-line="107" selection-start-column="32" selection-end-line="107" selection-end-column="32" />
+          <folding>
+            <element signature="e#879#892#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/test_local_consumer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="13" column="11" selection-start-line="13" selection-start-column="11" selection-end-line="13" selection-end-column="11" />
+          <folding>
+            <element signature="e#19#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/xqc_pulsar_consumer_v3.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113">
+          <caret line="96" selection-start-line="96" selection-end-line="96" />
+          <folding>
+            <element signature="e#86#97#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/dag/impala_to_pulsar_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="5" column="27" lean-forward="true" selection-start-line="5" selection-start-column="27" selection-end-line="5" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/processor/kudu_processor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="113">
+          <caret line="86" selection-start-line="86" selection-end-line="86" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
@@ -1003,41 +1158,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/processor/base_processor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="151">
-          <caret line="78" column="79" lean-forward="true" selection-start-line="78" selection-start-column="79" selection-end-line="78" selection-end-column="79" />
+        <state relative-caret-position="298">
+          <caret line="25" column="8" selection-start-line="25" selection-start-column="8" selection-end-line="25" selection-end-column="8" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/conf/xqc_jd_to_tb_config.json">
+    <entry file="file://$PROJECT_DIR$/src/operators/clickhouse_to_pulsar_v4.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="10" column="1" lean-forward="true" selection-start-line="10" selection-start-column="1" selection-end-line="10" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/conf/all_platform_to_tb.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/conf/clickhouse_msg_header_demo.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-472">
-          <caret line="10" column="21" lean-forward="true" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/dags/jd_to_tb_clickhouse_demo_v2.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="43" column="1" lean-forward="true" selection-start-line="43" selection-start-column="1" selection-end-line="43" selection-end-column="1" />
+        <state relative-caret-position="896">
+          <caret line="98" lean-forward="true" selection-start-line="98" selection-end-line="98" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#879#892#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/operators/impala_to_pulsar.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="116" column="21" lean-forward="true" selection-start-line="116" selection-start-column="21" selection-end-line="117" selection-end-column="33" />
+          <folding>
+            <element signature="e#879#892#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/processor/clickhouse_processor_v1.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="291">
+          <caret line="35" column="12" lean-forward="true" selection-start-line="35" selection-start-column="12" selection-end-line="35" selection-end-column="12" />
+          <folding>
+            <element signature="e#19#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
