@@ -31,3 +31,8 @@ class BaseMsgProcessor(metaclass=ABCMeta):
     def flush_cache_to_db(self):
         """ Flush Cached data to corresponding database. """
         pass
+
+    @abstractmethod
+    def say_hello(self):
+        """ Test the connection of processor to avoid lazy connection (e.g. clickhouse processor). """
+        pass

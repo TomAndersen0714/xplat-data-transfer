@@ -20,6 +20,11 @@ class ClickHouseProcessor(BaseMsgProcessor):
             insert_batch_rows=insert_batch_rows, logger=logger, name='clickhouse', *args, **kwargs)
         self.cluster_name = kwargs.get('ch_cluster_name', 'cluster_3s_2r')
         self.ch_client = Client(ch_host, ch_port)
+        try:
+            self.say_hello()
+        except Exception as e:
+            self.logger.error(f"\n{e}")
+            logging.error(f"\n{e}")
 
     def process_msg(self, msg: Message):
         """ Process every message. """
@@ -36,7 +41,9 @@ class ClickHouseProcessor(BaseMsgProcessor):
         try:
             self.clear_table(properties)
         except Exception as e:
-            self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties) + '\n' + str(e),
+            # what if truncate or drop failed!
+            self.logger.error(f"Truncate table or drop partition failed!\n{e}")
+            self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
                               log_type=NORMAL_LOG)
             self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
                               log_type=BAD_MSG_LOG)
@@ -158,3 +165,8 @@ class ClickHouseProcessor(BaseMsgProcessor):
                         self.logger.info(ch_del_sql, log_type=NORMAL_LOG)
                         self.ch_client.execute(ch_del_sql)
                         sleep(3)
+
+    def say_hello(self):
+        """ Test the connection of processor to avoid lazy connection (e.g. clickhouse processor). """
+        self.ch_client.execute("SELECT 1")
+        pass

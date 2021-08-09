@@ -24,6 +24,11 @@ class KuduProcessor(BaseMsgProcessor):
         self.kudu_client = kudu.connect(
             self.kudu_rpc_host, self.kudu_rpc_port
         )
+        try:
+            self.say_hello()
+        except Exception as e:
+            self.logger.error(f"\n{e}")
+            logging.error(f"\n{e}")
 
     def process_msg(self, msg: Message):
         """ Process every message. """
@@ -123,3 +128,8 @@ class KuduProcessor(BaseMsgProcessor):
             # self.logger.error(f"{tbl}: {records}", log_type=DIRTY_LOG)
         finally:
             return count
+
+    def say_hello(self):
+        """ Test the connection of processor. """
+        # cause kudu connection is not lazy, do nothing here
+        pass

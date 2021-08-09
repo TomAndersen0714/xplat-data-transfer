@@ -4,21 +4,14 @@ from airflow.contrib.operators.impala_to_pulsar import ImpalaToPulsarOperator
 from datetime import datetime, timedelta
 
 imp_conn_id = 'cdh0_impala'
-imp_source_table = 'tmp.kudu_test_table'
-kudu_dest_table = 'impala::tmp.kudu_test_target_table'
+imp_source_table = 'tmp.kudu_data_type_test'
+kudu_dest_table = 'impala::tmp.kudu_data_type_test_1'
 
 pulsar_conn_id = 'cdh2_pulsar'
 pulsar_topic = 'my-topic'
 
 source_platform = 'local'
 target_platform = 'local'
-
-# header = {
-#     "task_id": "kudu_to_kudu_test",
-#     "db_type": "clickhouse",
-#     "target_table": imp_dest_table,
-#     "partition": "{{ds_nodash}}"
-# }
 
 header = PulsarHook.get_kudu_msg_header(
     task_id="kudu_to_kudu_test",

@@ -29,7 +29,7 @@ def flush_cache_to_db(msg_processors):
             if processor:
                 processor.flush_cache_to_db()
         except Exception as e:
-            logging.error(str(e))
+            logging.error('\n' + str(e))
 
 
 def consume_msg_generator(
@@ -134,10 +134,15 @@ def get_msg_processors(conf: dict) -> Dict[str, BaseMsgProcessor]:
         logger = log_utils.get_msg_processor_logger(
             logger_name=db_name, base_path=ch_base_path
         )
-        msg_processors[db_name] = ClickHouseProcessor(
-            ch_host=conf.get('ch_host'), ch_port=int(conf.get('ch_port')),
-            insert_batch_rows=insert_batch_rows, logger=logger
-        )
+        try:
+            msg_processors[db_name] = ClickHouseProcessor(
+                ch_host=conf.get('ch_host'), ch_port=int(conf.get('ch_port')),
+                insert_batch_rows=insert_batch_rows, logger=logger
+            )
+        except Exception as e:
+            # logger.error(str(e))
+            logging.error(f"\n{e}")
+            logging.error(f"Create clickhouse processor failed!")
 
     # set processor for impala message
     if conf.get('impala_host') and conf.get('impala_port'):
