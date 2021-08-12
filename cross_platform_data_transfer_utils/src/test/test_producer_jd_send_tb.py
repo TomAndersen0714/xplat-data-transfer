@@ -15,7 +15,7 @@ def init_producer():
     properties = {
         "task_id": "Test jd send tb",
     }
-    for count in range(10):
+    for count in range(3):
         producer.send(('Test message %s' % count).encode('utf8'),
                       properties=properties)
         print('Sending message %d' % count)
@@ -24,7 +24,7 @@ def init_producer():
 
 def quit(signum, frame):
     print(f"signal {signum} {frame}")
-    pass
+    exit(0)
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import logging
 import pickle
+import traceback
 
 from time import sleep
 from clickhouse_driver import Client
@@ -20,11 +21,6 @@ class ClickHouseProcessor(BaseMsgProcessor):
             insert_batch_rows=insert_batch_rows, logger=logger, name='clickhouse', *args, **kwargs)
         self.cluster_name = kwargs.get('ch_cluster_name', 'cluster_3s_2r')
         self.ch_client = Client(ch_host, ch_port)
-        try:
-            self.say_hello()
-        except Exception as e:
-            self.logger.error(f"\n{e}")
-            logging.error(f"\n{e}")
 
     def process_msg(self, msg: Message):
         """ Process every message. """
@@ -35,14 +31,14 @@ class ClickHouseProcessor(BaseMsgProcessor):
         msg_id = msg.message_id()
         topic = msg.topic_name()
         target_table = properties.get('target_table', None)
-        self.logger.info(f'Message: {msg_id} is being processed.', log_type=NORMAL_LOG)
+        # self.logger.info(f'Message: {msg_id} is being processed.', log_type=NORMAL_LOG)
 
         # clear specified table or partition if necessary
         try:
             self.clear_table(properties)
         except Exception as e:
             # what if truncate or drop failed!
-            self.logger.error(f"Truncate table or drop partition failed!\n{e}")
+            self.logger.error(f"Truncate table or drop partition failed!\n{traceback.format_exc()}")
             self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
                               log_type=NORMAL_LOG)
             self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
@@ -58,14 +54,17 @@ class ClickHouseProcessor(BaseMsgProcessor):
             except Exception as e:
                 # if pickle module cannot deserialize the message, dump it to bad_message log
                 # and process next message
-                self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties) + '\n' + str(e),
-                                  log_type=NORMAL_LOG)
-                self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
-                                  log_type=BAD_MSG_LOG)
+                self.logger.error(
+                    str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties) + '\n' + traceback.format_exc(),
+                    log_type=NORMAL_LOG)
+                self.logger.error(
+                    str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
+                    log_type=BAD_MSG_LOG)
                 return
 
             # if pickle module deserialize message successfully, dump it to wal log
-            self.logger.info(str(properties) + ': ' + str(msg_rows_list), log_type=WAL_LOG)
+            # self.logger.info(str(properties) + ': ' + str(msg_rows_list), log_type=WAL_LOG)
+            # self.logger.info(f"{properties}: {msg_rows_list}", log_type=WAL_LOG)
 
             # allocate space and cache the records
             if target_table not in self._rows_cache_dict:
@@ -90,7 +89,7 @@ class ClickHouseProcessor(BaseMsgProcessor):
             # dump this message to bad message log
             self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
                               log_type=BAD_MSG_LOG)
-        self.logger.info(f'Message: {msg_id} processing completed.', log_type=NORMAL_LOG)
+        # self.logger.info(f'Message: {msg_id} processing completed.', log_type=NORMAL_LOG)
 
     def insert_data_with_tuple_list(self, table_name, rows_list) -> int:
         """
@@ -106,11 +105,12 @@ class ClickHouseProcessor(BaseMsgProcessor):
             self.logger.info(
                 'Insert into table %s: %d rows' % (table_name, insert_count), log_type=NORMAL_LOG
             )
+            # sleep(1)
         except Exception as e:
             insert_count = len(rows_list)
             # if insertion failed, dump the dirty data to dirty log
             # self.logger.error('Insertion failed!' + '\n' + str(e), log_type=NORMAL_LOG)
-            self.logger.error(f"Insertion failed!\n{e}", log_type=NORMAL_LOG)
+            self.logger.error(f"Insertion failed: {table_name}!\n{traceback.format_exc()}", log_type=NORMAL_LOG)
             # self.logger.error(tbl + ': ' + str(rows), log_type=DIRTY_LOG)
             self.logger.error(f"{table_name}: {rows_list}", log_type=DIRTY_LOG)
         finally:

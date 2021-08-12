@@ -18,14 +18,14 @@
 # under the License.
 
 # @Author   : chengcheng@xiaoduotech.com
-# @Date     : 2021/07/08
+# @Date     : 2021/07/18
 
 import pickle
 
 from airflow.contrib.hooks.clickhouse_hook import ClickHouseHook
 from airflow.contrib.hooks.pulsar_hook import PulsarHook
 from airflow.models import BaseOperator
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 
 class ClickHouseToPulsarOperator(BaseOperator):
@@ -37,7 +37,7 @@ class ClickHouseToPulsarOperator(BaseOperator):
 
     def __init__(self, task_id, ch_conn_id, ch_query_sql, pulsar_conn_id, topic,
                  with_column_types=False, max_msg_byte_size=4 * 1024 * 1024, cache_rows=100000,
-                 header: Dict= None,
+                 header: Optional[Dict[str, str]] = None,
                  *args, **kwargs):
         super(ClickHouseToPulsarOperator, self).__init__(task_id=task_id, *args, **kwargs)
         self.ch_conn_id = ch_conn_id
@@ -46,8 +46,8 @@ class ClickHouseToPulsarOperator(BaseOperator):
         self.ch_sql = ch_query_sql
         self.with_column_types = with_column_types
         self.max_msg_byte_size = max_msg_byte_size
+        # max message byte size can only be adjusted on Pulsar server side(default, 5MB).
         self.cache_rows = cache_rows
-        self._kwargs = kwargs
         self.header = header
         self.ch_hook = ClickHouseHook(self.ch_conn_id)
         self.pulsar_hook = PulsarHook(self.pulsar_conn_id, self.topic)
@@ -68,12 +68,12 @@ class ClickHouseToPulsarOperator(BaseOperator):
             row_byte_size = len(row_bytes)
 
             if row_byte_size > self.max_msg_byte_size:
-                raise Exception('The size of current row exceed the value of max_msg_byte_size!')
+                raise ValueError('The size of current row exceed the value of max_msg_byte_size!')
 
             # flush the cache and send it to pulsar when it's size reach the threshold
             if msg_byte_size + row_byte_size >= self.max_msg_byte_size:
                 self.log.info('*' * 20)
-                self.log.info('Sending %d rows, %d bytes message' %
+                self.log.info('Sending %d rows, %d bytes message.' %
                               (msg_row_total, msg_byte_size))
                 self.log.info('*' * 20)
 
@@ -91,7 +91,7 @@ class ClickHouseToPulsarOperator(BaseOperator):
             self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), properties=self.header)
 
             self.log.info('*' * 20)
-            self.log.info('Sending %d rows, %d bytes message' %
+            self.log.info('Sending %d rows, %d bytes message.' %
                           (msg_row_total, msg_byte_size))
             self.log.info('*' * 20)
 

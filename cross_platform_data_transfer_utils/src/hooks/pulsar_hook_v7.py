@@ -21,11 +21,10 @@
 # @Date     : 2021/08/04
 
 import uuid
-import uuid
+from typing import Dict
+from _pulsar import ConsumerType
 from airflow.hooks.dbapi_hook import DbApiHook
 from pulsar import Client
-from _pulsar import ConsumerType
-from typing import Dict, Optional
 
 
 class PulsarHook(DbApiHook):
@@ -105,9 +104,9 @@ class PulsarHook(DbApiHook):
 
     @classmethod
     def get_ch_msg_header(
-            cls, task_id, target_table, batch_id=None,
+            cls, target_table, batch_id=None,
             source_table=None, clear_table=None, partition=None, cluster_name=None,
-            source_platform=None, target_platform=None
+            source_platform=None, target_platform=None, task_id=None
     ) -> Dict:
         """
         Generate a ClickHouse message header for Pulsar.
@@ -118,23 +117,24 @@ class PulsarHook(DbApiHook):
         receiver will clear table on the cluster 'cluster_name'.
         """
 
-        return {
-            "task_id": str(task_id) if task_id else "",
-            "db_type": "clickhouse",
-            "batch_id": str(batch_id) if batch_id else str(uuid.uuid4()),
-            "source_table": str(source_table) if source_table else "",
-            "target_table": str(target_table) if target_table else "",
-            "clear_table": str(clear_table) if clear_table else "",
-            "partition": str(partition) if partition else "",
-            "cluster_name": str(cluster_name) if cluster_name else "",
-            "source_platform": str(source_platform) if source_platform else "",
-            "target_platform": str(target_platform) if target_platform else "",
-        }
+        local_params = dict(locals())
+        local_params.pop("cls", None)
+
+        header = dict()
+        for k, v in local_params.items():
+            header[k] = str(v) if v else ""
+
+        if "db_type" not in header or not header["db_type"]:
+            header["db_type"] = "clickhouse"
+        if "batch_id" not in header or not header["batch_id"]:
+            header["batch_id"] = str(uuid.uuid4())
+
+        return header
 
     @classmethod
     def get_kudu_msg_header(
-            cls, task_id, target_table, source_table=None, write_mode="upsert", batch_id=None,
-            source_platform=None, target_platform=None
+            cls, target_table, source_table=None, write_mode="upsert", batch_id=None,
+            task_id=None, source_platform=None, target_platform=None
     ) -> Dict:
         """
         Generate a kudu message header for Pulsar.
@@ -148,13 +148,16 @@ class PulsarHook(DbApiHook):
         :return:
         """
 
-        return {
-            "task_id": str(task_id) if task_id else "",
-            "db_type": "kudu",
-            "batch_id": str(batch_id) if batch_id else str(uuid.uuid4()),
-            "source_table": str(source_table) if source_table else "",
-            "target_table": str(target_table) if target_table else "",
-            "source_platform": str(source_platform) if source_platform else "",
-            "dest_platform": str(target_platform) if target_platform else "",
-            "write_mode": str(write_mode) if write_mode else "upsert"
-        }
+        local_params = dict(locals())
+        local_params.pop("cls", None)
+
+        header = dict()
+        for k, v in local_params.items():
+            header[k] = str(v) if v else ""
+
+        if "db_type" not in header or not header["db_type"]:
+            header["db_type"] = "kudu"
+        if "batch_id" not in header or not header["batch_id"]:
+            header["batch_id"] = str(uuid.uuid4())
+
+        return header

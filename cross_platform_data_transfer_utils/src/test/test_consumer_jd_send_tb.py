@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+import signal
+
 import pulsar
 from time import sleep
 
@@ -14,16 +16,24 @@ def init_consumer():
     consumer = client.subscribe(topic, subscription, consumer_type=ConsumerType.Shared)
     while True:
         try:
-            msg = consumer.receive(timeout_millis=10000)
+            msg = consumer.receive()
             print(msg.message_id())
             if msg.properties():
                 print(msg.properties())
             consumer.acknowledge(msg)
-            sleep(3)
+            sleep(1)
         except Exception as e:
             print(e)
             break
 
 
+def quit(signum, frame):
+    print(f"signal {signum} {frame}")
+    exit(0)
+
+
 if __name__ == '__main__':
+    signal.signal(signal.SIGINT, quit)
+    signal.signal(signal.SIGTERM, quit)
+
     init_consumer()

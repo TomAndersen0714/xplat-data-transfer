@@ -26,7 +26,6 @@ from airflow.contrib.hooks.impala_hook import ImpalaHook
 from airflow.contrib.hooks.pulsar_hook import PulsarHook
 from airflow.models import BaseOperator
 from typing import List, Dict, Optional
-
 from impala.hiveserver2 import HiveServer2Cursor
 
 
@@ -36,16 +35,18 @@ class ImpalaToPulsarOperator(BaseOperator):
     ui_color = '#e08c8c'
     template_fields = ["imp_sql", "header"]
 
-    def __init__(self, task_id, imp_conn_id, pulsar_conn_id, topic,
-                 imp_src_table=None, imp_sql=None,
-                 with_column_types=False, max_msg_byte_size=4 * 1024 * 1024, batch_rows=100000,
-                 header: Optional[Dict[str, str]] = None, row_mapper=None,
-                 *args, **kwargs):
+    def __init__(
+            self,
+            task_id, imp_conn_id, pulsar_conn_id, topic, header: Optional[Dict[str, str]],
+            src_table=None, imp_sql=None, with_column_types=False,
+            max_msg_byte_size=4 * 1024 * 1024, batch_rows=100000, row_mapper=None,
+            *args, **kwargs
+    ):
         BaseOperator.__init__(self, task_id=task_id, *args, **kwargs)
         self.imp_conn_id = imp_conn_id
         self.pulsar_conn_id = pulsar_conn_id
         self.topic = topic
-        self.imp_src_table = imp_src_table
+        self.src_table = src_table
         self.imp_sql = imp_sql
         self.with_column_types = with_column_types
         self.max_msg_byte_size = max_msg_byte_size
@@ -55,16 +56,22 @@ class ImpalaToPulsarOperator(BaseOperator):
         self.row_mapper = row_mapper
         self.imp_cursor: HiveServer2Cursor = ImpalaHook(self.imp_conn_id).get_cursor()
         self.pulsar_hook = PulsarHook(self.pulsar_conn_id, self.topic)
+
+        assert self.header is not None, "header shouldn't be None!"
+        assert self.imp_sql or self.src_table, "imp_sql and imp_src_table cannot both be empty!"
         if self.imp_sql is None:
-            assert self.imp_src_table is not None, "imp_sql and imp_src_table cannot both be empty!"
-            self.imp_sql = f"SELECT * FROM {self.imp_src_table}"
+            self.imp_sql = f"SELECT * FROM {self.src_table}"
+        if "task_id" not in self.header or not self.header["task_id"]:
+            self.header["task_id"] = str(self.task_id)
+        if "source_table" not in self.header or not self.header["source_table"]:
+            self.header["source_table"] = str(self.src_table)
 
     def execute(self, context):
         """
         Execute specific sql and send the result to pulsar.
         """
 
-        self.log.info(f'Sending messages to {self.pulsar_conn_id}')
+        self.log.info(f'Sending messages to {self.pulsar_conn_id}:{self.topic}')
         msg_bytes_list: List[bytes] = []
         msg_row_total, msg_byte_size = 0, 0
 
@@ -88,6 +95,7 @@ class ImpalaToPulsarOperator(BaseOperator):
                 self.log.info('*' * 20)
 
                 # serialize the entire list of bytes into bytes and send it to Pulsar
+                self.header["rows"] = str(len(msg_bytes_list))
                 self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), properties=self.header)
                 msg_bytes_list.clear()
                 msg_row_total, msg_byte_size = 0, 0
@@ -98,6 +106,7 @@ class ImpalaToPulsarOperator(BaseOperator):
 
         # clear the cache if necessary
         if msg_row_total != 0:
+            self.header["rows"] = str(len(msg_bytes_list))
             self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), properties=self.header)
 
             self.log.info('*' * 20)

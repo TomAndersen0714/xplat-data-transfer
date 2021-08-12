@@ -18,7 +18,7 @@
 # under the License.
 
 # @Author   : chengcheng@xiaoduotech.com
-# @Date     : 2021/07/18
+# @Date     : 2021/08/11
 
 import pickle
 
@@ -29,23 +29,26 @@ from typing import List, Dict, Optional, Tuple
 
 
 class ClickHouseToPulsarOperator(BaseOperator):
-    """
-    Fetch data from ClickHouse to Pulsar.
-    """
+    """ Fetch data from ClickHouse to Pulsar. """
+
     ui_color = '#e08c8c'
     template_fields = ["ch_sql", "header"]
 
-    def __init__(self, task_id, ch_conn_id, ch_query_sql, pulsar_conn_id, topic,
-                 row_mapper=None, max_msg_byte_size=4 * 1024 * 1024, cache_rows=100000,
-                 header: Optional[Dict[str, str]] = None,
-                 *args, **kwargs):
+    def __init__(
+            self,
+            task_id, ch_conn_id, ch_query_sql,
+            pulsar_conn_id, topic, header: Optional[Dict[str, str]],
+            src_table=None, row_mapper=None, cache_rows=100000,
+            *args, **kwargs
+    ):
         super(ClickHouseToPulsarOperator, self).__init__(task_id=task_id, *args, **kwargs)
         self.ch_conn_id = ch_conn_id
         self.pulsar_conn_id = pulsar_conn_id
         self.topic = topic
         self.ch_sql = ch_query_sql
+        self.src_table = src_table
         self.row_mapper = row_mapper
-        self.max_msg_byte_size = max_msg_byte_size
+        self.max_msg_byte_size = 1024 * 1024
         # max message byte size can only be adjusted on Pulsar server side(default, 5MB).
         self.cache_rows = cache_rows
         self.header = header
@@ -54,16 +57,27 @@ class ClickHouseToPulsarOperator(BaseOperator):
         self.ch_client = ClickHouseHook(self.ch_conn_id).ch_client
         self.pulsar_hook = PulsarHook(self.pulsar_conn_id, self.topic)
 
+        assert self.header is not None, "header shouldn't be None!"
+        assert self.ch_sql or self.src_table, "ch_sql and src_table cannot both be empty!"
+        if self.ch_sql is None:
+            self.ch_sql = f"SELECT * FROM {self.src_table}"
+        if "task_id" not in self.header or not self.header["task_id"]:
+            self.header["task_id"] = str(self.task_id)
+        if "source_table" not in self.header or not self.header["source_table"]:
+            self.header["source_table"] = str(self.src_table)
+
     def execute(self, context):
         """
         Execute specific sql and send the result to pulsar.
         """
 
-        self.log.info(f'Sending messages to {self.pulsar_conn_id}')
+        self.log.info(f'Sending messages to {self.pulsar_conn_id} - {self.topic}')
         msg_bytes_list: List[bytes] = []
+        send_rows = send_msgs = 0
         msg_row_total, msg_byte_size = 0, 0
 
         for row_tuple in self.ch_res_row_generator():
+            send_rows += 1
 
             # add column name to every row tuple
             row_dict = dict(zip(self.columns, row_tuple))
@@ -87,6 +101,7 @@ class ClickHouseToPulsarOperator(BaseOperator):
                 # serialize the entire list of bytes into bytes and send it to Pulsar
                 self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), properties=self.header)
                 msg_bytes_list.clear()
+                send_msgs += 1
                 msg_row_total, msg_byte_size = 0, 0
 
             msg_bytes_list.append(row_bytes)
@@ -101,7 +116,11 @@ class ClickHouseToPulsarOperator(BaseOperator):
             self.log.info('Sending %d rows, %d bytes message.' %
                           (msg_row_total, msg_byte_size))
             self.log.info('*' * 20)
+            send_msgs += 1
 
+        self.log.info('*' * 20)
+        self.log.info(f"Total sending rows: {send_rows} , messages: {send_msgs}")
+        self.log.info('*' * 20)
         self.pulsar_hook.close()
 
     def ch_res_row_generator(self):

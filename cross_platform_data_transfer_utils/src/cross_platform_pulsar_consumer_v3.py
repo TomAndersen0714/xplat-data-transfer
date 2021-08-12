@@ -1,22 +1,24 @@
 #!/usr/bin/python3
 # @Author   : chengcheng@xiaoduotech.com
-# @Date     : 2021/07/30
+# @Date     : 2021/08/02
 
 import json
 import logging
+import os
+import signal
 import sys
 import threading
 import time
-import signal
-import log_utils
-import os
+import traceback
 
 from typing import Dict
 from _pulsar import ConsumerType, Timeout
 from pulsar import Client
 
+import log_utils
 from processor.base_processor import BaseMsgProcessor
 from processor.clickhouse_processor_v1 import ClickHouseProcessor
+from processor.kudu_processor import KuduProcessor
 
 
 def flush_cache_to_db(msg_processors):
@@ -29,7 +31,7 @@ def flush_cache_to_db(msg_processors):
             if processor:
                 processor.flush_cache_to_db()
         except Exception as e:
-            logging.error('\n' + str(e))
+            logging.error(traceback.format_exc())
 
 
 def consume_msg_generator(
@@ -47,7 +49,7 @@ def consume_msg_generator(
                      f"consumer type: {consumer_type}.")
     except Exception as e:
         # if occur a unexpected error
-        logging.error('\n' + str(e))
+        logging.error('\n' + traceback.format_exc())
         return ''
 
     while True:
@@ -61,8 +63,8 @@ def consume_msg_generator(
             return
         try:
             msg = consumer.receive(timeout_millis)
-            logging.info(f'Receive [%s, %s, %s], message: %s' %
-                         (pulsar_url, topic, subscription, msg.message_id()))
+            # logging.info(f'Receive [%s, %s, %s], message: %s' %
+            #              (pulsar_url, topic, subscription, msg.message_id()))
 
             yield msg
             consumer.acknowledge(msg)
@@ -73,7 +75,7 @@ def consume_msg_generator(
             flush_cache_to_db(msg_processors)
         except Exception as e:
             # if occur a unexpected error
-            logging.error('\n' + str(e))
+            logging.error('\n' + traceback.format_exc())
             flush_cache_to_db(msg_processors)
 
 
@@ -99,7 +101,7 @@ def consume(
             try:
                 msg_processors[db_name].process_msg(msg)
             except Exception as e:
-                logging.error('\n' + str(e))
+                logging.error('\n' + traceback.format_exc())
         else:
             # pass the message to default msg processor
             pass
@@ -129,24 +131,36 @@ def get_msg_processors(conf: dict) -> Dict[str, BaseMsgProcessor]:
     # set processor for clickhouse message
     if conf.get('ch_host') and conf.get('ch_port'):
         db_name = 'clickhouse'
-        ch_base_path = os.path.join(base_path, db_name)
+        log_base_path = os.path.join(base_path, db_name)
         # create logger for message processor
         logger = log_utils.get_msg_processor_logger(
-            logger_name=db_name, base_path=ch_base_path
+            logger_name=db_name, base_path=log_base_path, level=logging.INFO
         )
         try:
             msg_processors[db_name] = ClickHouseProcessor(
                 ch_host=conf.get('ch_host'), ch_port=int(conf.get('ch_port')),
-                insert_batch_rows=insert_batch_rows, logger=logger
+                insert_batch_rows=int(conf.get('ch_insert_batch')), logger=logger
             )
         except Exception as e:
-            # logger.error(str(e))
-            logging.error(f"\n{e}")
-            logging.error(f"Create clickhouse processor failed!")
+            logging.error(f"{db_name} connection failed!\n{traceback.format_exc()}")
+            raise ConnectionError(f"{db_name} connection failed!")
 
     # set processor for impala message
-    if conf.get('impala_host') and conf.get('impala_port'):
-        pass
+    if conf.get('kudu_host') and conf.get('kudu_port'):
+        db_name = 'kudu'
+        log_base_path = os.path.join(base_path, db_name)
+        # create logger for message processor
+        logger = log_utils.get_msg_processor_logger(
+            logger_name=db_name, base_path=log_base_path
+        )
+        try:
+            msg_processors[db_name] = KuduProcessor(
+                kudu_host=conf.get('kudu_host'), kudu_port=int(conf.get('kudu_port')),
+                insert_batch_rows=int(conf.get('kudu_insert_batch')), logger=logger
+            )
+        except Exception as e:
+            logging.error(f"{db_name} connection failed!\n{traceback.format_exc()}")
+            raise ConnectionError(f"{db_name} connection failed!")
 
     return msg_processors
 
@@ -180,22 +194,19 @@ if __name__ == '__main__':
         'pulsar_url, topic, or subscription must be not empty!'
 
     insert_interval = int(conf.get('insert_interval', 60))
-    insert_batch_rows = int(conf.get('insert_batch_rows', 30000))
     timeout_millis = int(conf.get('timeout_millis', 15000))
     base_path: str = conf.get('base_path', '/data2/tmp/xqc_cross_platform/log')
 
     # initialize root logger
     root_logger_base_path = os.path.join(base_path, 'sys')
-    log_utils.init_root_logger(base_path=root_logger_base_path)
+    log_utils.init_root_logger(base_path=root_logger_base_path, level=logging.INFO)
     logging.info('Configures: ' + str(conf))
 
     # multi threading setting
-    pulsar_url = pulsar_url.strip('; ')  # strip the spaces and semicolons in the head and tail of params
-    pulsar_urls = pulsar_url.split(';')
-    topic = topic.strip('; ')
-    topics = topic.split(';')
-    subscription = subscription.strip('; ')
-    subscriptions = subscription.split(';')
+    # strip the spaces and semicolons in the head and tail of params
+    pulsar_urls = pulsar_url.strip('; ').split(';')
+    topics = topic.strip('; ').split(';')
+    subscriptions = subscription.strip('; ').split(';')
 
     assert len(pulsar_urls) and len(topics) and len(subscriptions), \
         'The number of pulsar_url, topic, and subscription must be the same!'
@@ -205,8 +216,17 @@ if __name__ == '__main__':
     # deploy consumer in multi thread
     stop_signal = threading.Event()
     for i in range(threads_count):
-        # create processors for every child thread
+        # create processors for every child thread to avoid multi-thread sync
         processors = get_msg_processors(conf)
+        # test the connection to avoid lazy connection and process message using error connection
+        for _, processor in processors.items():
+            if processor:
+                try:
+                    processor.say_hello()
+                except Exception as e:
+                    logging.error(f"{processor.name} connection failed!\n{traceback.format_exc()}")
+                    raise ConnectionError(f"{processor.name}  connection failed!")
+
         # start current thread
         kw_params = dict(
             pulsar_url=pulsar_urls[i],
@@ -222,5 +242,5 @@ if __name__ == '__main__':
         threads.append(t)
 
     # wait for all child thread
-    [threads[x].join() for x in range(0, threads_count)]
+    [thread.join() for thread in threads]
     logging.info("Main thread exit!")

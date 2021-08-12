@@ -3,11 +3,12 @@
   "topic": "persistent://bigdata/data_cross/mini_send_tb;persistent://bigdata/data_cross/ks_send_tb;persistent://bigdata/data_cross/jd_send_tb",
   "subscription": "bigdata_data_sync;bigdata_data_sync;bigdata_data_sync",
   "insert_interval": "60",
-  "insert_batch_rows": "30000",
-  "ch_host": "10.20.133.149",
+  "ch_host": "zjk-bigdata008",
   "ch_port": "19000",
+  "ch_insert_batch": "50000",
   "kudu_host": "zjk-bigdata002",
   "kudu_port": "7051",
+  "kudu_insert_batch": "10000",
   "timeout_millis": 15000,
-  "base_path": "/data2/tmp/xqc_sync"
+  "base_path": "/data2/tmp/cross_platform_sync"
 }

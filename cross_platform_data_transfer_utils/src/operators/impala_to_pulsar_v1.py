@@ -18,59 +18,72 @@
 # under the License.
 
 # @Author   : chengcheng@xiaoduotech.com
-# @Date     : 2021/07/18
+# @Date     : 2021/08/03
 
 import pickle
 
-from airflow.contrib.hooks.clickhouse_hook import ClickHouseHook
+from airflow.contrib.hooks.impala_hook import ImpalaHook
 from airflow.contrib.hooks.pulsar_hook import PulsarHook
 from airflow.models import BaseOperator
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional
+from impala.hiveserver2 import HiveServer2Cursor
 
 
-class ClickHouseToPulsarOperator(BaseOperator):
-    """
-    Fetch data from ClickHouse to Pulsar.
-    """
+class ImpalaToPulsarOperator(BaseOperator):
+    """ Fetch data from Impala to Pulsar. """
+
     ui_color = '#e08c8c'
-    template_fields = ["ch_sql", "header"]
+    template_fields = ["imp_sql", "header"]
 
-    def __init__(self, task_id, ch_conn_id, ch_query_sql, pulsar_conn_id, topic,
-                 row_mapper=None, max_msg_byte_size=4 * 1024 * 1024, cache_rows=100000,
-                 header: Optional[Dict[str, str]] = None,
-                 *args, **kwargs):
-        super(ClickHouseToPulsarOperator, self).__init__(task_id=task_id, *args, **kwargs)
-        self.ch_conn_id = ch_conn_id
+    def __init__(
+            self,
+            task_id, imp_conn_id, pulsar_conn_id, topic, header: Optional[Dict[str, str]],
+            src_table=None, imp_sql=None, with_column_types=False,
+            batch_rows=100000, row_mapper=None,
+            *args, **kwargs
+    ):
+        BaseOperator.__init__(self, task_id=task_id, *args, **kwargs)
+        self.imp_conn_id = imp_conn_id
         self.pulsar_conn_id = pulsar_conn_id
         self.topic = topic
-        self.ch_sql = ch_query_sql
-        self.row_mapper = row_mapper
-        self.max_msg_byte_size = max_msg_byte_size
+        self.src_table = src_table
+        self.imp_sql = imp_sql
+        self.with_column_types = with_column_types
+        self.max_msg_byte_size = 1024 * 1024
         # max message byte size can only be adjusted on Pulsar server side(default, 5MB).
-        self.cache_rows = cache_rows
+        self.batch_rows = batch_rows
         self.header = header
-        self.schemas: Optional[List[Tuple]] = None
-        self.columns: Optional[List[str]] = None
-        self.ch_client = ClickHouseHook(self.ch_conn_id).ch_client
+        self.row_mapper = row_mapper
+        self.imp_cursor: HiveServer2Cursor = ImpalaHook(self.imp_conn_id).get_cursor()
         self.pulsar_hook = PulsarHook(self.pulsar_conn_id, self.topic)
+
+        assert self.header is not None, "header shouldn't be None!"
+        assert self.imp_sql or self.src_table, "imp_sql and imp_src_table cannot both be empty!"
+        if self.imp_sql is None:
+            self.imp_sql = f"SELECT * FROM {self.src_table}"
+        if "task_id" not in self.header or not self.header["task_id"]:
+            self.header["task_id"] = str(self.task_id)
+        if "source_table" not in self.header or not self.header["source_table"]:
+            self.header["source_table"] = str(self.src_table)
 
     def execute(self, context):
         """
         Execute specific sql and send the result to pulsar.
         """
 
-        self.log.info(f'Sending messages to {self.pulsar_conn_id}')
+        self.log.info(f'Sending messages to {self.pulsar_conn_id}:{self.topic}')
         msg_bytes_list: List[bytes] = []
+        send_rows = send_msgs = 0
         msg_row_total, msg_byte_size = 0, 0
 
-        for row_tuple in self.ch_res_row_generator():
+        for row_dict in self.imp_res_dict_row_generator():
+            send_rows += 1
 
-            # add column name to every row tuple
-            row_dict = dict(zip(self.columns, row_tuple))
+            # transform every row if necessary before sending
             if self.row_mapper:
                 row_dict = self.row_mapper(row_dict)
 
-            # serialize every row record from dict into bytes
+            # serialize every row record from tuple into bytes
             row_bytes = pickle.dumps(row_dict)
             row_byte_size = len(row_bytes)
 
@@ -85,8 +98,10 @@ class ClickHouseToPulsarOperator(BaseOperator):
                 self.log.info('*' * 20)
 
                 # serialize the entire list of bytes into bytes and send it to Pulsar
+                self.header["rows"] = str(len(msg_bytes_list))
                 self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), properties=self.header)
                 msg_bytes_list.clear()
+                send_msgs += 1
                 msg_row_total, msg_byte_size = 0, 0
 
             msg_bytes_list.append(row_bytes)
@@ -95,29 +110,29 @@ class ClickHouseToPulsarOperator(BaseOperator):
 
         # clear the cache if necessary
         if msg_row_total != 0:
+            self.header["rows"] = str(len(msg_bytes_list))
             self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), properties=self.header)
 
             self.log.info('*' * 20)
             self.log.info('Sending %d rows, %d bytes message.' %
                           (msg_row_total, msg_byte_size))
             self.log.info('*' * 20)
+            send_msgs += 1
 
+        self.log.info('*' * 20)
+        self.log.info(f"Total sending rows: {send_rows} , messages: {send_msgs}")
+        self.log.info('*' * 20)
         self.pulsar_hook.close()
 
-    def ch_res_row_generator(self):
-        """
-        Execute the sql query, fetch the result batch-by-batch, and return the generator as a cursor.
-        Every row of result is represented by a tuple(e.g. (1,'Tom','Andersen'))
-        You can also query the column names and types by switch the param 'self.with_column_types' to
-        true.(...)
-        """
-        # return self.ch_hook.get_data_by_bath(self.cache_rows, self.ch_sql, self.with_column_types)
-
-        self.log.info(f'Executing query on {self.ch_conn_id}：{self.ch_sql}')
-        settings = {'max_block_size': self.cache_rows}
-        gen = self.ch_client.execute_iter(self.ch_sql, with_column_types=True, settings=settings)
-        self.schemas = next(gen)
-        self.columns = [x[0] for x in self.schemas]
-        self.log.info(f"schemas: {self.schemas}")
-        self.log.info(f"columns: {self.columns}")
-        return gen
+    def imp_res_dict_row_generator(self):
+        self.log.info(f"Executing query on {self.imp_conn_id}：{self.imp_sql}")
+        self.imp_cursor.execute(self.imp_sql)
+        columns = [col[0] for col in self.imp_cursor.description]
+        self.log.info(f"columns: {columns}")
+        while True:
+            batch = [dict(zip(columns, row)) for row in self.imp_cursor.fetchmany(self.batch_rows)]
+            if batch:
+                for row in batch:
+                    yield row
+            else:
+                return

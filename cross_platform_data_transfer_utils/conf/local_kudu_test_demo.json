@@ -3,9 +3,9 @@
   "topic": "my-topic;my-topic;my-topic",
   "subscription": "my-subscription;my-subscription;my-subscription",
   "insert_interval": 60,
-  "insert_batch_rows": 30000,
   "kudu_host": "cdh1",
   "kudu_port": "7051",
+  "kudu_insert_batch": "10000",
   "timeout_millis": 30000,
-  "base_path": "/data2/tmp/xqc_sync/log"
+  "base_path": "/data2/tmp/cross_platform_sync/log"
 }

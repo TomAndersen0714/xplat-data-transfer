@@ -17,8 +17,6 @@ from pulsar import Client
 
 from processor.base_processor import BaseMsgProcessor
 from processor.clickhouse_processor_v1 import ClickHouseProcessor
-from processor.impala_processor import ImpalaProcessor
-from processor.kudu_processor import KuduProcessor
 
 
 def flush_cache_to_db(msg_processors):
@@ -31,7 +29,7 @@ def flush_cache_to_db(msg_processors):
             if processor:
                 processor.flush_cache_to_db()
         except Exception as e:
-            logging.error(str(e))
+            logging.error('\n' + str(e))
 
 
 def consume_msg_generator(
@@ -131,28 +129,24 @@ def get_msg_processors(conf: dict) -> Dict[str, BaseMsgProcessor]:
     # set processor for clickhouse message
     if conf.get('ch_host') and conf.get('ch_port'):
         db_name = 'clickhouse'
-        log_base_path = os.path.join(base_path, db_name)
+        ch_base_path = os.path.join(base_path, db_name)
         # create logger for message processor
         logger = log_utils.get_msg_processor_logger(
-            logger_name=db_name, base_path=log_base_path
+            logger_name=db_name, base_path=ch_base_path
         )
-        msg_processors[db_name] = ClickHouseProcessor(
-            ch_host=conf.get('ch_host'), ch_port=int(conf.get('ch_port')),
-            insert_batch_rows=insert_batch_rows, logger=logger
-        )
+        try:
+            msg_processors[db_name] = ClickHouseProcessor(
+                ch_host=conf.get('ch_host'), ch_port=int(conf.get('ch_port')),
+                insert_batch_rows=insert_batch_rows, logger=logger
+            )
+        except Exception as e:
+            # logger.error(str(e))
+            logging.error(f"\n{e}")
+            logging.error(f"Create clickhouse processor failed!")
 
     # set processor for impala message
-    if conf.get('kudu_host') and conf.get('kudu_port'):
-        db_name = 'kudu'
-        log_base_path = os.path.join(base_path, db_name)
-        # create logger for message processor
-        logger = log_utils.get_msg_processor_logger(
-            logger_name=db_name, base_path=log_base_path
-        )
-        msg_processors[db_name] = KuduProcessor(
-            kudu_host=conf.get('kudu_host'), kudu_port=int(conf.get('kudu_port')),
-            batch_rows=insert_batch_rows, logger=logger
-        )
+    if conf.get('impala_host') and conf.get('impala_port'):
+        pass
 
     return msg_processors
 
@@ -188,7 +182,7 @@ if __name__ == '__main__':
     insert_interval = int(conf.get('insert_interval', 60))
     insert_batch_rows = int(conf.get('insert_batch_rows', 30000))
     timeout_millis = int(conf.get('timeout_millis', 15000))
-    base_path: str = conf.get('base_path', '/data2/tmp/xqc_cross_platform/log')
+    base_path: str = conf.get('base_path', '/data2/tmp/cross_platform_sync/log')
 
     # initialize root logger
     root_logger_base_path = os.path.join(base_path, 'sys')
@@ -196,10 +190,12 @@ if __name__ == '__main__':
     logging.info('Configures: ' + str(conf))
 
     # multi threading setting
-    # strip the spaces and semicolons in the head and tail of params
-    pulsar_urls = pulsar_url.strip('; ').split(';')
-    topics = topic.strip('; ').split(';')
-    subscriptions = subscription.strip('; ').split(';')
+    pulsar_url = pulsar_url.strip('; ')  # strip the spaces and semicolons in the head and tail of params
+    pulsar_urls = pulsar_url.split(';')
+    topic = topic.strip('; ')
+    topics = topic.split(';')
+    subscription = subscription.strip('; ')
+    subscriptions = subscription.split(';')
 
     assert len(pulsar_urls) and len(topics) and len(subscriptions), \
         'The number of pulsar_url, topic, and subscription must be the same!'

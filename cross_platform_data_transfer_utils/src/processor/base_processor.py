@@ -1,12 +1,9 @@
 #!/usr/bin/python3
-import pickle
 import threading
 
 from abc import ABCMeta, abstractmethod
 from typing import List, Tuple, Dict
 from pulsar import Message
-
-from log_utils.log_types import *
 from log_utils.loggers import MsgProcessorLogger
 
 

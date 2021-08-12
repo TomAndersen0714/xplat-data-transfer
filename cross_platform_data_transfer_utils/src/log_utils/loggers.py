@@ -1,12 +1,8 @@
 #!/usr/bin/python3
 # @Author   : chengcheng@xiaoduotech.com
 # @Date     : 2021/07/21
-import io
-import logging
-import os
-import sys
 import inspect
-import traceback
+import logging
 
 from .log_types import *
 

@@ -3,9 +3,9 @@
   "topic": "persistent://bigdata/data_cross/tb_send_jd",
   "subscription": "bigdata_data_sync",
   "insert_interval": "60",
-  "insert_batch_rows": "30000",
   "ch_host": "yd-bigdata-01",
   "ch_port": "9900",
+  "ch_insert_batch": "50000",
   "timeout_millis": 15000,
-  "base_path": "/data2/tmp/xqc_sync"
+  "base_path": "/data2/tmp/cross_platform_sync"
 }
