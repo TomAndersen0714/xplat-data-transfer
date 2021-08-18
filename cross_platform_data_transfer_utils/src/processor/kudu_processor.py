@@ -5,9 +5,9 @@ import kudu
 
 from time import sleep
 
-from kudu.errors import KuduBadStatus, KuduException
+from kudu.errors import KuduException
 from pulsar import Message
-from typing import Dict, List
+from typing import Dict
 from log_utils.log_types import *
 from .base_processor import BaseMsgProcessor
 
@@ -111,11 +111,13 @@ class KuduProcessor(BaseMsgProcessor):
         if not records:
             return 0
         if not self.kudu_client.table_exists(table_name):
-            self.logger.error(f"Upsert failed: table {table_name} does not exist!")
+            self.logger.error(f"Upsert failed: table {table_name} does not exist!",
+                              log_type=NORMAL_LOG)
             return len(records)
 
         # open specified table and add all write operation into kudu session
-        kudu_session = self.kudu_client.new_session(flush_mode='manual')
+        # WARNING: the value of 'timeout_ms' must be greater than 30000
+        kudu_session = self.kudu_client.new_session(flush_mode='manual', timeout_ms=60000)
         kudu_table = self.kudu_client.table(table_name)
         count = len(records)
         cursor = 0
@@ -124,21 +126,24 @@ class KuduProcessor(BaseMsgProcessor):
 
             # flush all cached write operation into database batch by batch
             for record in records:
-                if cursor < self.insert_batch_rows:
-                    kudu_session.apply(kudu_table.new_upsert(record))
-                    cursor += 1
-                else:
+                kudu_session.apply(kudu_table.new_upsert(record))
+                cursor += 1
+
+                if cursor >= self.insert_batch_rows:
                     kudu_session.flush()
                     self.logger.info(f"Upsert into table {table_name}: {cursor} rows",
                                      log_type=NORMAL_LOG)
                     cursor = 0
                     sleep(0.1)
+
             if cursor != 0:
                 kudu_session.flush()
                 self.logger.info(f"Upsert into table {table_name}: {cursor} rows",
                                  log_type=NORMAL_LOG)
         except KuduException as e:
             self.logger.error(f"Upsert failed: {table_name}!\n{traceback.format_exc()}",
+                              log_type=NORMAL_LOG)
+            self.logger.error(f"Kudu errors: {kudu_session.get_pending_errors()}",
                               log_type=NORMAL_LOG)
         finally:
             return count

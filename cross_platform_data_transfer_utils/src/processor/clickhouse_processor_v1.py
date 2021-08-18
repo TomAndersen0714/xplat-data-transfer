@@ -38,10 +38,11 @@ class ClickHouseProcessor(BaseMsgProcessor):
             self.clear_table(properties)
         except Exception as e:
             # what if truncate or drop failed!
-            self.logger.error(f"Truncate table or drop partition failed!\n{traceback.format_exc()}")
-            self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
+            self.logger.error(f"Truncate table or drop partition failed!\n{traceback.format_exc()}",
                               log_type=NORMAL_LOG)
-            self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
+            # self.logger.error(f"Truncate table or drop partition failed!\n{traceback.format_exc()}",
+            #                   log_type=DIRTY_LOG)
+            self.logger.error(f"{topic} - {msg_id} - {properties}",
                               log_type=BAD_MSG_LOG)
             return
 
@@ -54,12 +55,10 @@ class ClickHouseProcessor(BaseMsgProcessor):
             except Exception as e:
                 # if pickle module cannot deserialize the message, dump it to bad_message log
                 # and process next message
-                self.logger.error(
-                    str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties) + '\n' + traceback.format_exc(),
-                    log_type=NORMAL_LOG)
-                self.logger.error(
-                    str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
-                    log_type=BAD_MSG_LOG)
+                self.logger.error(f"Message parsing failed!\n{traceback.format_exc()}",
+                                  log_type=NORMAL_LOG)
+                self.logger.error(f"{topic} - {msg_id} - {properties}",
+                                  log_type=BAD_MSG_LOG)
                 return
 
             # if pickle module deserialize message successfully, dump it to wal log
@@ -83,11 +82,11 @@ class ClickHouseProcessor(BaseMsgProcessor):
         else:
             # raise TypeError('Target table is not specified!')
             # the properties of message doesn't contain 'target_table'
-            self.logger.error('Target table is not specified in properties! ' +
-                              str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
+            self.logger.error(f"Target table is not specified in properties!\n"
+                              f"{topic} - {msg_id} - {properties}",
                               log_type=NORMAL_LOG)
             # dump this message to bad message log
-            self.logger.error(str(topic) + ' - ' + str(msg_id) + ' - ' + str(properties),
+            self.logger.error(f"{topic} - {msg_id} - {properties}",
                               log_type=BAD_MSG_LOG)
         # self.logger.info(f'Message: {msg_id} processing completed.', log_type=NORMAL_LOG)
 
@@ -96,9 +95,9 @@ class ClickHouseProcessor(BaseMsgProcessor):
         Insert data into database(e.g. [{'a': 3, 'b': 'Tom'}], [(3,'Tom')]).
         """
 
-        sql = f"insert into {table_name} values "
+        sql = f"Insert into {table_name} values "
         insert_count = 0
-        self.logger.info(sql, log_type=NORMAL_LOG)
+        # self.logger.info(sql, log_type=NORMAL_LOG)
         try:
             insert_count = self.ch_client.execute(sql, rows_list)
             # print('insert into table %s: %d rows' % (table_name, insert_count))
@@ -109,10 +108,10 @@ class ClickHouseProcessor(BaseMsgProcessor):
         except Exception as e:
             insert_count = len(rows_list)
             # if insertion failed, dump the dirty data to dirty log
-            # self.logger.error('Insertion failed!' + '\n' + str(e), log_type=NORMAL_LOG)
-            self.logger.error(f"Insertion failed: {table_name}!\n{traceback.format_exc()}", log_type=NORMAL_LOG)
-            # self.logger.error(tbl + ': ' + str(rows), log_type=DIRTY_LOG)
-            self.logger.error(f"{table_name}: {rows_list}", log_type=DIRTY_LOG)
+            self.logger.error(f"Insertion failed: {table_name}!\n{traceback.format_exc()}",
+                              log_type=NORMAL_LOG)
+            # self.logger.error(f"Insertion failed: {table_name}!\n{traceback.format_exc()}",
+            #                   log_type=DIRTY_LOG)
         finally:
             return insert_count
 

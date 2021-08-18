@@ -48,7 +48,7 @@ class ClickHouseToPulsarOperator(BaseOperator):
         self.ch_sql = ch_query_sql
         self.src_table = src_table
         self.row_mapper = row_mapper
-        self.max_msg_byte_size = 1024 * 1024
+        self.max_msg_byte_size = 256 * 1024
         # max message byte size can only be adjusted on Pulsar server side(default, 5MB).
         self.cache_rows = cache_rows
         self.header = header

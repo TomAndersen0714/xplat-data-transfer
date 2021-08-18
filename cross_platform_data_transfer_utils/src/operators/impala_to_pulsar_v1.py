@@ -49,7 +49,7 @@ class ImpalaToPulsarOperator(BaseOperator):
         self.src_table = src_table
         self.imp_sql = imp_sql
         self.with_column_types = with_column_types
-        self.max_msg_byte_size = 1024 * 1024
+        self.max_msg_byte_size = 256 * 1024
         # max message byte size can only be adjusted on Pulsar server side(default, 5MB).
         self.batch_rows = batch_rows
         self.header = header
