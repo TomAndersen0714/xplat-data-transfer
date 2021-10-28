@@ -9,7 +9,8 @@ target_platform = 'tb'
 target_db = 'kudu'
 job_id = 'demo_job_id'
 interval = 'daily'
-dag_id = f'{job_id}_{source_platform}_to_{target_platform}_{target_db}_{interval}'
+
+dag_id = 'demo_dag'
 
 # 数据源
 imp_conn_id = 'cdh0_impala'

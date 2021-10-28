@@ -4,7 +4,7 @@
   "subscription": "my-subscription",
   "insert_interval": 60,
   "ch_host": "10.0.2.2",
-  "ch_port": 29000,
+  "ch_port": 19000,
   "ch_insert_batch": "50000",
   "kudu_host": "cdh1",
   "kudu_port": "7051",

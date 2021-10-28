@@ -18,7 +18,7 @@ from pulsar import Client
 import log_utils
 from processor.base_processor import BaseMsgProcessor
 from processor.clickhouse_processor_v1 import ClickHouseProcessor
-from processor.kudu_processor import KuduProcessor
+from processor.kudu_processor_v1 import KuduProcessor
 
 
 def flush_cache_to_db(msg_processors):
@@ -155,7 +155,10 @@ def get_msg_processors(conf: dict) -> Dict[str, BaseMsgProcessor]:
         )
         try:
             msg_processors[db_name] = KuduProcessor(
-                kudu_host=conf.get('kudu_host'), kudu_port=int(conf.get('kudu_port')),
+                kudu_host=conf.get('kudu_host'),
+                kudu_port=int(conf.get('kudu_port')),
+                impala_host=conf.get("impala_host", "localhost"),
+                impala_port=conf.get("impala_port", 21050),
                 insert_batch_rows=int(conf.get('kudu_insert_batch')), logger=logger
             )
         except Exception as e:

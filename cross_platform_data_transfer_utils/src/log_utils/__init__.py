@@ -85,7 +85,7 @@ def init_root_logger(
 
 def get_msg_processor_logger(
         logger_name, base_path, level: int = logging.DEBUG,
-        when='D', interval=1, encoding='utf-8', backupCount=7
+        when='MIDNIGHT', interval=1, encoding='utf-8', backupCount=7
 ):
     """
     Create a logger for pulsar message processor, and default shelf life of log files is 7 days.

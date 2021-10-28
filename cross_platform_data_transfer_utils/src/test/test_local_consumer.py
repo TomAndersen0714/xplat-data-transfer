@@ -16,6 +16,7 @@ def init_consume():
     while True:
         try:
             msg = consumer.receive(5000)
+            print(msg.message_id())
             print(msg.properties())
             # content = msg.data()
             # rows_bytes_list = pickle.loads(content)

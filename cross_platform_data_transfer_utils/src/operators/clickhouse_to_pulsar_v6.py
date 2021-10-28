@@ -55,8 +55,6 @@ class ClickHouseToPulsarOperator(BaseOperator):
         self.header = header
         self.schemas: Optional[List[Tuple]] = None
         self.columns: Optional[List[str]] = None
-        self.ch_client: Client = ClickHouseHook(self.ch_conn_id).ch_client
-        self.pulsar_hook = PulsarHook(self.pulsar_conn_id, self.topic)
 
         assert self.header is not None, "header shouldn't be None!"
         assert self.ch_sql or self.src_table, "ch_sql and src_table cannot both be empty!"
@@ -72,6 +70,9 @@ class ClickHouseToPulsarOperator(BaseOperator):
         Execute specific sql and send the result to pulsar.
         """
 
+        self.ch_client: Client = ClickHouseHook(self.ch_conn_id).ch_client
+        self.pulsar_hook = PulsarHook(self.pulsar_conn_id, self.topic)
+
         self.log.info(f'Sending messages to {self.pulsar_conn_id} - {self.topic}')
         self.log.info(f"Message header: {self.header}")
 
@@ -79,54 +80,55 @@ class ClickHouseToPulsarOperator(BaseOperator):
         send_rows = send_msgs = 0
         msg_row_total, msg_byte_size = 0, 0
 
-        for row_tuple in self.ch_res_row_generator():
-            send_rows += 1
+        try:
+            for row_tuple in self.ch_res_row_generator():
+                send_rows += 1
 
-            # add column name to every row tuple
-            row_dict = dict(zip(self.columns, row_tuple))
-            if self.row_mapper:
-                row_dict = self.row_mapper(row_dict)
+                # add column name to every row tuple
+                row_dict = dict(zip(self.columns, row_tuple))
+                if self.row_mapper:
+                    row_dict = self.row_mapper(row_dict)
 
-            # serialize every row record from dict into bytes
-            row_bytes = pickle.dumps(row_dict)
-            row_byte_size = len(row_bytes)
+                # serialize every row record from dict into bytes
+                row_bytes = pickle.dumps(row_dict)
+                row_byte_size = len(row_bytes)
 
-            if row_byte_size > self.max_msg_byte_size:
-                raise ValueError('The size of current row exceed the value of max_msg_byte_size!')
+                if row_byte_size > self.max_msg_byte_size:
+                    raise ValueError('The size of current row exceed the value of max_msg_byte_size!')
 
-            # flush the cache and send it to pulsar when it's size reach the threshold
-            if msg_byte_size + row_byte_size >= self.max_msg_byte_size:
+                # flush the cache and send it to pulsar when it's size reach the threshold
+                if msg_byte_size + row_byte_size >= self.max_msg_byte_size:
+                    self.log.info('*' * 20)
+                    self.log.info('Sending %d rows, %d bytes message.' %
+                                  (msg_row_total, msg_byte_size))
+                    self.log.info('*' * 20)
+
+                    # serialize the entire list of bytes into bytes and send it to Pulsar
+                    self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), properties=self.header)
+                    msg_bytes_list.clear()
+                    send_msgs += 1
+                    msg_row_total, msg_byte_size = 0, 0
+
+                msg_bytes_list.append(row_bytes)
+                msg_row_total += 1
+                msg_byte_size += row_byte_size
+
+            # clear the cache if necessary
+            if msg_row_total != 0:
+                self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), properties=self.header)
+
                 self.log.info('*' * 20)
                 self.log.info('Sending %d rows, %d bytes message.' %
                               (msg_row_total, msg_byte_size))
                 self.log.info('*' * 20)
-
-                # serialize the entire list of bytes into bytes and send it to Pulsar
-                self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), properties=self.header)
-                msg_bytes_list.clear()
                 send_msgs += 1
-                msg_row_total, msg_byte_size = 0, 0
-
-            msg_bytes_list.append(row_bytes)
-            msg_row_total += 1
-            msg_byte_size += row_byte_size
-
-        # clear the cache if necessary
-        if msg_row_total != 0:
-            self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), properties=self.header)
 
             self.log.info('*' * 20)
-            self.log.info('Sending %d rows, %d bytes message.' %
-                          (msg_row_total, msg_byte_size))
+            self.log.info(f"Total sent rows: {send_rows} , messages: {send_msgs}")
             self.log.info('*' * 20)
-            send_msgs += 1
-
-        self.log.info('*' * 20)
-        self.log.info(f"Total sending rows: {send_rows} , messages: {send_msgs}")
-        self.log.info('*' * 20)
-
-        self.pulsar_hook.close()
-
+        finally:
+            self.ch_client.disconnect()
+            self.pulsar_hook.close()
 
     def ch_res_row_generator(self):
         """

@@ -1,0 +1,11 @@
+{
+  "pulsar_url": "pulsar://pulsar-cluster01-slb:6650",
+  "topic": "persistent://bigdata/data_cross/tb_send_mini",
+  "subscription": "bigdata_data_sync",
+  "insert_interval": "60",
+  "ch_host": "znzjk-113175-prod-mini-bigdata-bigdata",
+  "ch_port": "29000",
+  "ch_insert_batch": "50000",
+  "timeout_millis": 15000,
+  "base_path": "/data2/tmp/cross_platform_sync"
+}
