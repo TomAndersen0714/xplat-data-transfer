@@ -94,6 +94,7 @@ class ClickHouseToPulsarOperator(BaseOperator):
                 row_byte_size = len(row_bytes)
 
                 if row_byte_size > self.max_msg_byte_size:
+                    self.log.error(row_dict)
                     raise ValueError('The size of current row exceed the value of max_msg_byte_size!')
 
                 # flush the cache and send it to pulsar when it's size reach the threshold
