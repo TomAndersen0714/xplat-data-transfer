@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="cdh2_remote_interpreter" autoUploadExternalChanges="true">
+  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
-      <paths name="cdh2_remote_interpreter">
+      <paths name="root@10.0.2.2:22 password">
         <serverdata>
           <mappings>
-            <mapping deploy="/data0/workspace/cc/PyCharmProjects/xiaoduo/xqc_across_platform_utils" local="$PROJECT_DIR$" />
+            <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
     </serverData>
-    <option name="myAutoUpload" value="ALWAYS" />
   </component>
 </project>

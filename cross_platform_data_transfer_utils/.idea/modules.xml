@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/xqc_across_platform_utils.iml" filepath="$PROJECT_DIR$/.idea/xqc_across_platform_utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/cross_platform_data_transfer_utils.iml" filepath="$PROJECT_DIR$/.idea/cross_platform_data_transfer_utils.iml" />
     </modules>
   </component>
 </project>
