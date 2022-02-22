@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import pulsar
-
 import signal
+from uuid import uuid4
 from time import sleep
 
 pulsar_url = 'pulsar://pulsar-pro:6650'
@@ -16,19 +16,20 @@ def init_producer():
         "task_id": "Test jd send tb",
     }
     for count in range(3):
-        producer.send(('Test message %s' % count).encode('utf8'),
+        id = uuid4()
+        producer.send(('Test message %s' % id).encode('utf8'),
                       properties=properties)
-        print('Sending message %d' % count)
+        print('Sending message %d' % id)
         sleep(3)
 
 
-def quit(signum, frame):
+def graceful_exit_processor(signum, frame):
     print(f"signal {signum} {frame}")
     exit(0)
 
 
 if __name__ == '__main__':
-    signal.signal(signal.SIGINT, quit)
-    signal.signal(signal.SIGTERM, quit)
+    signal.signal(signal.SIGINT, graceful_exit_processor)
+    signal.signal(signal.SIGTERM, graceful_exit_processor)
 
     init_producer()

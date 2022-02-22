@@ -3,6 +3,29 @@
   <component name="ChangeListManager">
     <list default="true" id="b6c58fc3-92dc-474a-affe-f5e7f6f574d1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/dag/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_opt_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/dag/clickhouse_to_pulsar_opt_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_test_v2.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/dag/clickhouse_to_pulsar_test_v2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_test_v3.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/dag/clickhouse_to_pulsar_test_v3.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/clickhouse_to_pulsar_test_v4.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/dag/clickhouse_to_pulsar_test_v4.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/impala_to_pulsar_local_test_v1.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/dag/impala_to_pulsar_local_test_v1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/impala_to_pulsar_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/dag/impala_to_pulsar_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/pulsar_hook_consume_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/dag/pulsar_hook_consume_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/pulsar_hook_produce_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/dag/pulsar_hook_produce_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/dag/pulsar_to_clickhouse_opt_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/dag/pulsar_to_clickhouse_opt_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/data_sync_consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/data_sync_consumer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/impala_opt_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/impala_opt_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/test_consumer_jd_send_tb.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_consumer_jd_send_tb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/test_consumer_ks_send_tb.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_consumer_ks_send_tb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/test_consumer_mini_send_tb.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_consumer_mini_send_tb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/test_consumer_tb_send_jd.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_consumer_tb_send_jd.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/test_local_consumer.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_local_consumer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/test_logger.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_logger.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/test_producer_jd_send_tb.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_producer_jd_send_tb.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/test_producer_local.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_producer_local.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/test_producer_mini_send_tb.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/test_producer_mini_send_tb.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +55,9 @@
     </file-type-list>
   </component>
   <component name="ProjectId" id="21xrXuab5fLr6t5GJ69CIpZadlN" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -41,10 +66,18 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/test" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="preferences.updates" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\WorkSpace\projects\PyCharmProjects\airflow_utils\cross_platform_data_transfer_utils\src\test" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\WorkSpace\projects\PyCharmProjects\airflow_utils\cross_platform_data_transfer_utils" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -56,6 +89,7 @@
       <updated>1638893622613</updated>
       <workItem from="1638893623839" duration="2898000" />
       <workItem from="1645446098997" duration="659000" />
+      <workItem from="1645549966679" duration="1777000" />
     </task>
     <servers />
   </component>
