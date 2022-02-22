@@ -18,84 +18,120 @@
 # under the License.
 
 # @Author   : chengcheng@xiaoduotech.com
-# @Date     : 2021/07/08
+# @Date     : 2021/08/11
 
 import pickle
 
 from airflow.contrib.hooks.clickhouse_hook import ClickHouseHook
 from airflow.contrib.hooks.pulsar_hook import PulsarHook
 from airflow.models import BaseOperator
-from typing import List
+from typing import List, Dict, Optional, Tuple
+from clickhouse_driver import Client
 
 
 class ClickHouseToPulsarOperator(BaseOperator):
-    """
-    Fetch data from ClickHouse to Pulsar.
-    """
-    ui_color = '#e08c8c'
-    template_fields = ["ch_sql"]
+    """ Fetch data from ClickHouse to Pulsar. """
 
-    def __init__(self, task_id, ch_conn_id, ch_query_sql, pulsar_conn_id, topic,
-                 with_column_types=False, max_msg_byte_size=4 * 1024 * 1024, cache_rows=100000,
-                 *args, **kwargs):
+    ui_color = '#e08c8c'
+    template_fields = ["ch_sql", "header"]
+
+    def __init__(
+            self,
+            task_id, ch_conn_id, ch_query_sql,
+            pulsar_conn_id, topic, header: Optional[Dict[str, str]],
+            src_table=None, row_mapper=None, cache_rows=100000,
+            *args, **kwargs
+    ):
         super(ClickHouseToPulsarOperator, self).__init__(task_id=task_id, *args, **kwargs)
         self.ch_conn_id = ch_conn_id
         self.pulsar_conn_id = pulsar_conn_id
         self.topic = topic
         self.ch_sql = ch_query_sql
-        self.with_column_types = with_column_types
-        self.max_msg_byte_size = max_msg_byte_size
+        self.src_table = src_table
+        self.row_mapper = row_mapper
+        self.max_msg_byte_size = 64 * 1024
+        # max message byte size can only be adjusted on Pulsar server side(default, 5MB).
         self.cache_rows = cache_rows
-        self._kwargs = kwargs
-        self.ch_hook = ClickHouseHook(self.ch_conn_id)
-        self.pulsar_hook = PulsarHook(self.pulsar_conn_id, self.topic)
+        self.header = header
+        self.schemas: Optional[List[Tuple]] = None
+        self.columns: Optional[List[str]] = None
+
+        assert self.header is not None, "header shouldn't be None!"
+        assert self.ch_sql or self.src_table, "ch_sql and src_table cannot both be empty!"
+        if self.ch_sql is None:
+            self.ch_sql = f"SELECT * FROM {self.src_table}"
+        if "task_id" not in self.header or not self.header["task_id"]:
+            self.header["task_id"] = str(self.task_id)
+        if "source_table" not in self.header or not self.header["source_table"]:
+            self.header["source_table"] = str(self.src_table)
 
     def execute(self, context):
         """
         Execute specific sql and send the result to pulsar.
         """
 
-        self.log.info(f'Sending messages to {self.pulsar_conn_id}')
+        self.ch_client: Client = ClickHouseHook(self.ch_conn_id).ch_client
+        self.pulsar_hook = PulsarHook(self.pulsar_conn_id, self.topic)
+
+        self.log.info(f'Sending messages to {self.pulsar_conn_id} - {self.topic}')
+        self.log.info(f"Message header: {self.header}")
+
         msg_bytes_list: List[bytes] = []
+        send_rows = send_msgs = 0
         msg_row_total, msg_byte_size = 0, 0
 
-        for row_tuple in self.ch_res_tuple_generator():
+        try:
+            for row_tuple in self.ch_res_row_generator():
+                send_rows += 1
 
-            # serialize every row record from tuple into bytes
-            row_bytes = pickle.dumps(row_tuple)
-            row_byte_size = len(row_bytes)
+                # add column name to every row tuple
+                row_dict = dict(zip(self.columns, row_tuple))
+                if self.row_mapper:
+                    row_dict = self.row_mapper(row_dict)
 
-            if row_byte_size > self.max_msg_byte_size:
-                raise Exception('The size of current row exceed the value of max_msg_byte_size!')
+                # serialize every row record from dict into bytes
+                row_bytes = pickle.dumps(row_dict)
+                row_byte_size = len(row_bytes)
 
-            # flush the cache and send it to pulsar when it's size reach the threshold
-            if msg_byte_size + row_byte_size >= self.max_msg_byte_size:
+                if row_byte_size > self.max_msg_byte_size:
+                    self.log.error(row_dict)
+                    raise ValueError('The size of current row exceed the value of max_msg_byte_size!')
+
+                # flush the cache and send it to pulsar when it's size reach the threshold
+                if msg_byte_size + row_byte_size >= self.max_msg_byte_size:
+                    self.log.info('*' * 20)
+                    self.log.info('Sending %d rows, %d bytes message.' %
+                                  (msg_row_total, msg_byte_size))
+                    self.log.info('*' * 20)
+
+                    # serialize the entire list of bytes into bytes and send it to Pulsar
+                    self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), properties=self.header)
+                    msg_bytes_list.clear()
+                    send_msgs += 1
+                    msg_row_total, msg_byte_size = 0, 0
+
+                msg_bytes_list.append(row_bytes)
+                msg_row_total += 1
+                msg_byte_size += row_byte_size
+
+            # clear the cache if necessary
+            if msg_row_total != 0:
+                self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), properties=self.header)
+
                 self.log.info('*' * 20)
-                self.log.info('Sending %d rows, %d bytes message' %
+                self.log.info('Sending %d rows, %d bytes message.' %
                               (msg_row_total, msg_byte_size))
                 self.log.info('*' * 20)
-
-                # serialize the entire list of bytes into bytes and send it to Pulsar
-                self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), **self._kwargs)
-                msg_bytes_list.clear()
-                msg_row_total, msg_byte_size = 0, 0
-
-            msg_bytes_list.append(row_bytes)
-            msg_row_total += 1
-            msg_byte_size += row_byte_size
-
-        # clear the cache if necessary
-        if msg_row_total != 0:
-            self.pulsar_hook.send_msg(pickle.dumps(msg_bytes_list), **self._kwargs)
+                send_msgs += 1
 
             self.log.info('*' * 20)
-            self.log.info('Sending %d rows, %d bytes message' %
-                          (msg_row_total, msg_byte_size))
+            self.log.info(f"Total sent rows: {send_rows} , messages: {send_msgs}")
             self.log.info('*' * 20)
+        finally:
+            self.ch_client.disconnect()
+            self.pulsar_hook.close()
 
-        self.pulsar_hook.close()
-
-    def ch_res_tuple_generator(self):
+    def ch_res_row_generator(self):
         """
         Execute the sql query, fetch the result batch-by-batch, and return the generator as a cursor.
         Every row of result is represented by a tuple(e.g. (1,'Tom','Andersen'))
@@ -105,4 +141,10 @@ class ClickHouseToPulsarOperator(BaseOperator):
         # return self.ch_hook.get_data_by_bath(self.cache_rows, self.ch_sql, self.with_column_types)
 
         self.log.info(f'Executing query on {self.ch_conn_id}：{self.ch_sql}')
-        return self.ch_hook.get_data_by_bath(self.cache_rows, self.ch_sql)
+        settings = {'max_block_size': self.cache_rows}
+        gen = self.ch_client.execute_iter(self.ch_sql, with_column_types=True, settings=settings)
+        self.schemas = next(gen)
+        self.columns = [x[0] for x in self.schemas]
+        self.log.info(f"schemas: {self.schemas}")
+        self.log.info(f"columns: {self.columns}")
+        return gen

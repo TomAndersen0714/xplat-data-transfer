@@ -106,7 +106,7 @@ class PulsarHook(DbApiHook):
     def get_ch_msg_header(
             cls, target_table, batch_id=None,
             source_table=None, clear_table=None, partition=None, cluster_name=None,
-            source_platform=None, target_platform=None, task_id=None, **kwargs
+            source_platform=None, target_platform=None, task_id=None
     ) -> Dict:
         """
         Generate a ClickHouse message header for Pulsar.
@@ -163,22 +163,22 @@ class PulsarHook(DbApiHook):
             header["batch_id"] = str(uuid.uuid4())
 
         return header
-
-    @classmethod
-    def get_hdfs_msg_header(
-            cls, target_table, source_table=None,
-            **kwargs
-    ) -> Dict:
-        local_params = dict(locals())
-        local_params.pop("cls", None)
-
-        header = dict()
-        for k, v in local_params.items():
-            header[k] = str(v) if v else ""
-
-        if "db_type" not in header or not header["db_type"]:
-            header["db_type"] = "hdfs"
-        if "batch_id" not in header or not header["batch_id"]:
-            header["batch_id"] = str(uuid.uuid4())
-
-        return header
+    
+    # @classmethod
+    # def get_hdfs_msg_header(
+    #         cls, target_table, source_table=None,
+    #         **kwargs
+    # ) -> Dict:
+    #     local_params = dict(locals())
+    #     local_params.pop("cls", None)
+    #
+    #     header = dict()
+    #     for k, v in local_params.items():
+    #         header[k] = str(v) if v else ""
+    #
+    #     if "db_type" not in header or not header["db_type"]:
+    #         header["db_type"] = "hdfs"
+    #     if "batch_id" not in header or not header["batch_id"]:
+    #         header["batch_id"] = str(uuid.uuid4())
+    #
+    #     return header

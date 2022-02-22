@@ -18,18 +18,18 @@
 # under the License.
 
 # @Author   : chengcheng@xiaoduotech.com
-# @Date     : 2021/07/06
+# @Date     : 2021/08/04
 
+import uuid
+from typing import Dict
+from _pulsar import ConsumerType
 from airflow.hooks.dbapi_hook import DbApiHook
 from pulsar import Client
-from _pulsar import ConsumerType
-from typing import Dict
 
 
 class PulsarHook(DbApiHook):
     conn_name_attr = 'pulsar_conn_id'
     default_conn_name = 'default_pulsar_conn_id'
-    __END_SIGN__ = b'END_SIGN'
 
     def __init__(self, pulsar_conn_id, topic, **kwargs):
         super(PulsarHook, self).__init__(pulsar_conn_id)
@@ -65,7 +65,7 @@ class PulsarHook(DbApiHook):
         else:
             producer.send_async(content, properties=properties)
 
-    def consume_msg_generator(self, sub_name, mode=ConsumerType.Exclusive,
+    def consume_msg_generator(self, sub_name, mode=ConsumerType.Shared,
                               timeout_millis=None, **kwargs):
         """
         Subscribe topic and return a generator for consuming message.
@@ -87,12 +87,6 @@ class PulsarHook(DbApiHook):
                 self.log.info('Receive %s:%s message %s' %
                               (self.topic, self._sub_name, msg.message_id()))
 
-                # if received ENG_SIGN, stop the iteration and data stream
-                if msg.data() == PulsarHook.__END_SIGN__:
-                    self.log.info('Receive END_SIGN and stop current stream!')
-                    consumer.acknowledge(msg)
-                    return
-
                 yield msg
                 consumer.acknowledge(msg)
             except Exception as e:
@@ -103,8 +97,88 @@ class PulsarHook(DbApiHook):
         Send a end sign, and close the producer and consumer.
         """
         if self._producer:
-            self._producer.send(PulsarHook.__END_SIGN__)
             self._producer.close()
         if self._consumer:
             self._consumer.close()
         self.pulsar_client.close()
+
+    @classmethod
+    def get_ch_msg_header(
+            cls, target_table, batch_id=None,
+            source_table=None, clear_table=None, partition=None, cluster_name=None,
+            source_platform=None, target_platform=None, task_id=None
+    ) -> Dict:
+        """
+        Generate a ClickHouse message header for Pulsar.
+        If 'partition' is None, message receiver will truncate table 'clear_table' on
+        cluster 'cluster_name', else receiver will drop corresponding partition of 'clear_table'.
+
+        If 'cluster_name' is None, message receiver will delete table data on the single node, else
+        receiver will clear table on the cluster 'cluster_name'.
+        """
+
+        local_params = dict(locals())
+        local_params.pop("cls", None)
+
+        header = dict()
+        for k, v in local_params.items():
+            header[k] = str(v) if v else ""
+
+        if "db_type" not in header or not header["db_type"]:
+            header["db_type"] = "clickhouse"
+        if "batch_id" not in header or not header["batch_id"]:
+            header["batch_id"] = str(uuid.uuid4())
+
+        return header
+
+    @classmethod
+    def get_kudu_msg_header(
+            cls, target_table, source_table=None, write_mode="upsert", batch_id=None,
+            task_id=None, source_platform=None, target_platform=None, range_partition=None,
+            **kwargs
+    ) -> Dict:
+        """
+        Generate a kudu message header for Pulsar.
+        :param task_id:
+        :param target_table:
+        :param source_table:
+        :param write_mode:
+        :param batch_id:
+        :param source_platform:
+        :param target_platform:
+        :param range_partition:
+        :return:
+        """
+
+        local_params = dict(locals())
+        local_params.pop("cls", None)
+
+        header = dict()
+        for k, v in local_params.items():
+            header[k] = str(v) if v else ""
+
+        if "db_type" not in header or not header["db_type"]:
+            header["db_type"] = "kudu"
+        if "batch_id" not in header or not header["batch_id"]:
+            header["batch_id"] = str(uuid.uuid4())
+
+        return header
+    
+    # @classmethod
+    # def get_hdfs_msg_header(
+    #         cls, target_table, source_table=None,
+    #         **kwargs
+    # ) -> Dict:
+    #     local_params = dict(locals())
+    #     local_params.pop("cls", None)
+    #
+    #     header = dict()
+    #     for k, v in local_params.items():
+    #         header[k] = str(v) if v else ""
+    #
+    #     if "db_type" not in header or not header["db_type"]:
+    #         header["db_type"] = "hdfs"
+    #     if "batch_id" not in header or not header["batch_id"]:
+    #         header["batch_id"] = str(uuid.uuid4())
+    #
+    #     return header
