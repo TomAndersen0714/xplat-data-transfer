@@ -22,7 +22,7 @@
 
 from airflow.hooks.dbapi_hook import DbApiHook
 from pulsar import Client
-from _pulsar import ConsumerType
+from pulsar import ConsumerType
 from typing import Dict
 
 

@@ -4,7 +4,7 @@ import signal
 import pulsar
 from time import sleep
 
-from _pulsar import ConsumerType
+from pulsar import ConsumerType
 
 pulsar_url = 'pulsar://pulsar-cluster01-slb:6650'
 topic = 'persistent://bigdata/data_cross/jd_send_tb'

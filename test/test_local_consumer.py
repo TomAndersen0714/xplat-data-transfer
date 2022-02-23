@@ -2,7 +2,7 @@
 import pickle
 
 import pulsar
-from _pulsar import ConsumerType
+from pulsar import ConsumerType
 from time import sleep
 
 

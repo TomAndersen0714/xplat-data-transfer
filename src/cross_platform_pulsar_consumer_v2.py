@@ -12,7 +12,7 @@ import log_utils
 import os
 
 from typing import Dict
-from _pulsar import ConsumerType, Timeout
+from pulsar import ConsumerType, Timeout
 from pulsar import Client
 
 from processor.base_processor import BaseMsgProcessor

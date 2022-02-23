@@ -12,8 +12,7 @@ import time
 import traceback
 
 from typing import Dict
-from _pulsar import ConsumerType, Timeout
-from pulsar import Client
+from pulsar import Client, Timeout, ConsumerType
 
 import log_utils
 from processor.base_processor import BaseMsgProcessor

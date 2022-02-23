@@ -22,9 +22,8 @@
 
 import uuid
 from typing import Dict
-from _pulsar import ConsumerType
 from airflow.hooks.dbapi_hook import DbApiHook
-from pulsar import Client
+from pulsar import Client, ConsumerType
 
 
 class PulsarHook(DbApiHook):
@@ -163,7 +162,7 @@ class PulsarHook(DbApiHook):
             header["batch_id"] = str(uuid.uuid4())
 
         return header
-    
+
     # @classmethod
     # def get_hdfs_msg_header(
     #         cls, target_table, source_table=None,
