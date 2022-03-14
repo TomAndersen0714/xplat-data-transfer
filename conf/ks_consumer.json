@@ -1,0 +1,11 @@
+{
+  "pulsar_url": "pulsar://pulsar-pro:6650",
+  "topic": "persistent://bigdata/data_cross/tb_send_ks",
+  "subscription": "bigdata_data_sync",
+  "insert_interval": "60",
+  "ch_host": "ks-023111066-bigdata-clickhouse",
+  "ch_port": "9000",
+  "ch_insert_batch": "50000",
+  "timeout_millis": 15000,
+  "base_path": "/data2/tmp/cross_platform_sync"
+}
