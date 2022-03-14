@@ -1,5 +1,5 @@
 {
-  "pulsar_url": "pulsar://pulsar-pro:6650",
+  "pulsar_url": "pulsar://pulsar-cluster01-slb:6650",
   "topic": "persistent://bigdata/data_cross/tb_send_ks",
   "subscription": "bigdata_data_sync",
   "insert_interval": "60",

@@ -5,7 +5,7 @@ import subprocess
 from time import sleep
 
 SOURCE_DIR = "../src/cross_platform_pulsar_consumer_v3.py"
-CONF_DIR = "../conf/all_platform_to_tb.json"
+CONF_DIR = "../conf/tb_comsumer.json"
 
 
 def main():
@@ -13,7 +13,7 @@ def main():
     args_parser = argparse.ArgumentParser(description='xplat-data-transfer controller.')
 
     # introducing arguments
-    args_parser.add_argument("action", type=str, choices=['start', 'stop', 'restart'])
+    args_parser.add_argument("action", type=str, choices=['start', 'stop', 'restart', 'status'])
     args_parser.add_argument("-V", "--version", dest="version", action="version",
                              version="0.0.1")
 
@@ -57,6 +57,15 @@ def main():
         cmd = f"nohup python3 {SOURCE_DIR} {CONF_DIR} 1>/dev/null 2>nohup.out & "
         # print(cmd)
         subprocess.check_call(cmd, shell=True)
+
+    elif action == "status":
+        cmd = f"""ps -ef | grep '{SOURCE_DIR}' | grep -v 'grep' | sed -n '1p' | awk '{{print $2}}'"""
+        # print(cmd)
+        pid = subprocess.check_output(cmd, shell=True).decode('utf-8').strip()
+        if pid:
+            print(f"There daemon thread is [{pid}]")
+        else:
+            print("There is no daemon thread.")
 
 
 if __name__ == '__main__':

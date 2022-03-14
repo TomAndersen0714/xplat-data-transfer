@@ -6,7 +6,7 @@ if (($# != 1)); then
 fi
 
 SOURCE_DIR="../src/cross_platform_pulsar_consumer_v3.py"
-CONF_DIR="../conf/all_platform_to_tb.json"
+CONF_DIR="../conf/tb_comsumer.json"
 
 case $1 in
 "start")
@@ -18,9 +18,8 @@ case $1 in
 
   if [ "${pid}" != "" ]; then
     kill "${pid}"
+    sleep 10s
   fi
-
-  sleep 10s
 
   nohup python3 ${SOURCE_DIR} ${CONF_DIR} 1>/dev/null 2>&1 &
   ;;
@@ -30,9 +29,8 @@ case $1 in
 
   if [ "${pid}" != "" ]; then
     kill "${pid}"
+    sleep 10s
   fi
-
-  sleep 10s
   ;;
 
 *)
