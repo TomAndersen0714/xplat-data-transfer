@@ -2,6 +2,9 @@
 # @Author   : chengcheng@xiaoduotech.com
 # @Date     : 2021/08/02
 
+import log_utils
+from processor.base_processor import BaseMsgProcessor
+
 import json
 import logging
 import os
@@ -10,14 +13,8 @@ import sys
 import threading
 import time
 import traceback
-
 from typing import Dict
 from pulsar import Client, Timeout, ConsumerType
-
-import log_utils
-from processor.base_processor import BaseMsgProcessor
-from processor.clickhouse_processor_v1 import ClickHouseProcessor
-# from processor.kudu_processor_v1 import KuduProcessor
 
 
 def flush_cache_to_db(msg_processors):
@@ -129,6 +126,7 @@ def get_msg_processors(conf: dict) -> Dict[str, BaseMsgProcessor]:
 
     # set processor for clickhouse message
     if conf.get('ch_host') and conf.get('ch_port'):
+        from processor.clickhouse_processor_v1 import ClickHouseProcessor
         db_name = 'clickhouse'
         log_base_path = os.path.join(base_path, db_name)
         # create logger for message processor
@@ -144,25 +142,26 @@ def get_msg_processors(conf: dict) -> Dict[str, BaseMsgProcessor]:
             logging.error(f"{db_name} connection failed!\n{traceback.format_exc()}")
             raise ConnectionError(f"{db_name} connection failed!")
 
-    # # set processor for impala message
-    # if conf.get('kudu_host') and conf.get('kudu_port'):
-    #     db_name = 'kudu'
-    #     log_base_path = os.path.join(base_path, db_name)
-    #     # create logger for message processor
-    #     logger = log_utils.get_msg_processor_logger(
-    #         logger_name=db_name, base_path=log_base_path
-    #     )
-    #     try:
-    #         msg_processors[db_name] = KuduProcessor(
-    #             kudu_host=conf.get('kudu_host'),
-    #             kudu_port=int(conf.get('kudu_port')),
-    #             impala_host=conf.get("impala_host", "localhost"),
-    #             impala_port=conf.get("impala_port", 21050),
-    #             insert_batch_rows=int(conf.get('kudu_insert_batch')), logger=logger
-    #         )
-    #     except Exception as e:
-    #         logging.error(f"{db_name} connection failed!\n{traceback.format_exc()}")
-    #         raise ConnectionError(f"{db_name} connection failed!")
+    # set processor for impala message
+    if conf.get('kudu_host') and conf.get('kudu_port'):
+        from processor.kudu_processor_v1 import KuduProcessor
+        db_name = 'kudu'
+        log_base_path = os.path.join(base_path, db_name)
+        # create logger for message processor
+        logger = log_utils.get_msg_processor_logger(
+            logger_name=db_name, base_path=log_base_path
+        )
+        try:
+            msg_processors[db_name] = KuduProcessor(
+                kudu_host=conf.get('kudu_host'),
+                kudu_port=int(conf.get('kudu_port')),
+                impala_host=conf.get("impala_host", "localhost"),
+                impala_port=conf.get("impala_port", 21050),
+                insert_batch_rows=int(conf.get('kudu_insert_batch')), logger=logger
+            )
+        except Exception as e:
+            logging.error(f"{db_name} connection failed!\n{traceback.format_exc()}")
+            raise ConnectionError(f"{db_name} connection failed!")
 
     return msg_processors
 
@@ -197,7 +196,7 @@ if __name__ == '__main__':
 
     insert_interval = int(conf.get('insert_interval', 60))
     timeout_millis = int(conf.get('timeout_millis', 15000))
-    base_path: str = conf.get('base_path', '/data2/tmp/xqc_cross_platform/log')
+    base_path: str = conf.get('base_path', '/data2/tmp/xplat-data-transfer/')
 
     # initialize root logger
     root_logger_base_path = os.path.join(base_path, 'sys')
